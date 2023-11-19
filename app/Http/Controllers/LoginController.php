@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Password;
+
+class LoginController extends Controller
+{
+    /**
+     * Display login page.
+     *
+     * @return Renderable
+     */
+    public function show()
+    {
+        return view('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'phone_number' => ['required', 'numeric', 'digits_between:10,15'],
+            'password' => ['required', 'string', 'min:5'],
+        ]);
+
+        if (Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        }
+
+        return back()->withErrors([
+            'phone_number' => 'Số điện thoại hoặc mật khẩu không đúng.',
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+}
