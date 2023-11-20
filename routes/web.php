@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
     Route::get('/user-details/{id}', [UserController::class, 'show'])->name('user-details');
+    Route::delete('/user-details/{id}', [UserController::class, 'delete'])->name('user-details.delete');
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
     Route::get('users/template', [UserController::class, 'template'])->name('users.template');

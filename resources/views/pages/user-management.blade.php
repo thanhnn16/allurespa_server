@@ -6,6 +6,18 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý khách hàng'])
     <div class="row mt-4 mx-4">
         <div class="col-12">
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    <p class="text-white mb-0">
+                        {{ session('error') }}</p>
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success" role="alert">
+                    <p class="text-white mb-0">
+                        {{ session('success') }}</p>
+                </div>
+            @endif
             <div class="alert alert-white" role="alert">
                 <strong>Khách có sinh nhật trong 15 ngày tới: </strong>
                 <br>
@@ -167,7 +179,6 @@
 
                                     <td class="align-middle text-end">
                                         <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-
                                             <p class="text-sm font-weight-bold mb-0 cursor-pointer"><a
                                                     href="#" class="user-details" data-id="{{ $user->id }}">Xem</a>
                                             </p>
@@ -205,7 +216,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-danger"><a
+                            href="#" id="#user-delete" data-id="{{ $user->id }}">Xoá</a></button>
                     <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -222,23 +234,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form action="/users/import" method="POST" enctype="multipart/form-data"
-                          class="form-control bg-transparent">
+                <form action="/users/import" method="POST" enctype="multipart/form-data"
+                      class="form-control bg-transparent">
+                    <div class="modal-body">
                         @csrf
                         <input type="file" name="file" accept=".xlsx">
-                        <button class="btn btn-simple" type="submit">Nhập từ Excel</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Đóng</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" type="submit">Nhập từ Excel</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
-
-
-
     <script>
         $(document).ready(function () {
             $('.user-details').click(function (e) {
@@ -246,6 +256,7 @@
                 e.preventDefault();
 
                 const userId = $(this).data('id');
+
 
                 $.ajax({
                     url: '/user-details/' + userId,
@@ -262,7 +273,34 @@
         });
 
         $(document).ready(function () {
-            $('#search-customers').keyup(function (e) {
+            $('#modal-notification').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('id');
+                var modal = $(this);
+                modal.find('.btn-danger').data('id', userId);
+            });
+
+            $('#user-delete').click(function (e) {
+                e.preventDefault();
+
+                let userId = $(this).data('id');
+
+                $.ajax({
+                    url: '/user-details/' + userId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#search-customers').keyup(function () {
                 let value = $(this).val().toLowerCase();
                 $("#customers-table tr").each(function () {
                     let name = $(this).find('.search-name').text().toLowerCase();
@@ -271,5 +309,19 @@
                 });
             });
         });
+
+        $(document).ready(function () {
+            $('#upload-excel').on('shown.bs.modal', function () {
+                if ($('input[type=file]').val() === "") {
+                    $('.btn-success').attr('disabled', true);
+                }
+            });
+            $('input[type=file]').change(function () {
+                if ($('input[type=file]').val() !== "") {
+                    $('.btn-success').attr('disabled', false);
+                }
+            });
+        });
+
     </script>
 @endsection
