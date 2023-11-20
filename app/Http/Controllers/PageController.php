@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PageController extends Controller
 {
     /**
@@ -26,23 +24,5 @@ class PageController extends Controller
         return view("pages.virtual-reality");
     }
 
-    public function rtl()
-    {
-        return view("pages.rtl");
-    }
 
-    public function profile()
-    {
-        return view("pages.profile-static");
-    }
-
-    public function signin()
-    {
-        return view("pages.sign-in-static");
-    }
-
-    public function signup()
-    {
-        return view("pages.sign-up-static");
-    }
 }

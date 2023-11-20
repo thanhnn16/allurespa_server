@@ -23,8 +23,8 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone_number' => ['required', 'numeric', 'digits_between:10,15'],
-            'password' => ['required', 'string', 'min:5'],
+            'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+            'password' => ['required', 'string', 'min:6'],
         ]);
 
         if (Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])) {

@@ -16,14 +16,8 @@ class RegisterController extends Controller
             'password' => 'required|min:5',
             'terms' => 'required'
         ]);
-        try {
-            $user = User::create($attributes);
-            auth()->login($user);
-        } catch (Exception $e) {
-            print $e->getMessage();
-            return back()->withErrors(['message' => 'There was an error creating the user.']);
-        }
-
+        $user = User::create($attributes);
+        auth()->login($user);
         return redirect('/dashboard');
     }
 

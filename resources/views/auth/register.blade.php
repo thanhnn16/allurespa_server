@@ -19,15 +19,6 @@
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
                         <p class="text-lead text-black-50 px-3 mt-3 text-center">Bạn không thể đăng ký nếu a Thành không cho phép!!!</p>
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                         <div class="card-body">
                             <form method="POST" action="{{ route('register.perform') }}">
                                 @csrf
