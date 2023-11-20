@@ -28,6 +28,13 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password])) {
+            if (Auth::user()->role != 'admin') {
+                Auth::logout();
+                return back()->withErrors([
+                    'phone_number' => 'Bạn không có quyền truy cập vào trang này. Liên hệ với quản trị viên để biết thêm chi tiết.',
+                ]);
+            }
+
             $request->session()->regenerate();
 
             return redirect()->intended('dashboard');

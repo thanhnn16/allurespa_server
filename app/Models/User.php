@@ -23,6 +23,7 @@ class User extends Authenticatable
         'role',
         'full_name',
         'address',
+        'gender',
         'date_of_birth',
         'skin_condition',
         'image',
@@ -61,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->attributes['password'] = bcrypt($value);
     }
+
+    /**
+     * @param array<string, string> $data
+     * @return User
+     */
 }
