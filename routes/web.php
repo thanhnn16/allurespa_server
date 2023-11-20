@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user-details/{id}', [UserController::class, 'show'])->name('user-details');
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+    Route::get('users/template', [UserController::class, 'template'])->name('users.template');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 

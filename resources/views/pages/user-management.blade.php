@@ -42,6 +42,7 @@
                                 Nhập / xuất file
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="/users/template">Tải mẫu nhập</a></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#upload-excel">Nhập
                                         từ Excel</a></li>
                                 <li><a class="dropdown-item" href="/users/export">Xuất ra Excel</a></li>

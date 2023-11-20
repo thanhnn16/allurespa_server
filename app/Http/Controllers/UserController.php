@@ -40,4 +40,12 @@ class UserController extends Controller
 
         return redirect('/user-management');
     }
+
+    public function template()
+    {
+//        get file from public/templates
+        $file = public_path() . "/templates/import_template.xlsx";
+//        return response()->download($file);
+        return response()->download($file, 'import_template.xlsx');
+    }
 }
