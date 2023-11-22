@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use App\Models\User;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -25,15 +28,16 @@ class UserController extends Controller
         return view('pages.user-management-create');
     }
 
-    public function show($user): JsonResponse
+    public function show(User $user): JsonResponse
     {
         return response()->json($user);
     }
 
-    public function delete($user): JsonResponse
+    public function delete($id): Application|\Illuminate\Foundation\Application|RedirectResponse|Redirector
     {
+        $user = User::find($id);
         $user->delete();
-        return response()->json(['success' => true]);
+        return redirect('/user-management')->with('success', 'Xóa người dùng thành công');
     }
 
     public function export(): BinaryFileResponse
@@ -51,7 +55,7 @@ class UserController extends Controller
             if ($e->errorInfo[1] == 1062) {
                 return redirect('/user-management')->with('error', 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Email hoặc số điện thoại đã tồn tại trong hệ thống.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect('/user-management')->with('error', 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Lỗi chi tiết: ' . $e->getMessage());
         }
 

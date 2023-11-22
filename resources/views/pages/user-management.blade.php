@@ -1,7 +1,5 @@
-@php
-    use Carbon\Carbon;
-@endphp
-@extends('layouts.app')
+@extends('layouts.app');
+
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý khách hàng'])
     <div class="row mt-4 mx-4">
@@ -18,6 +16,7 @@
                         {{ session('success') }}</p>
                 </div>
             @endif
+
             <div class="alert alert-white" role="alert">
                 <strong>Khách có sinh nhật trong 15 ngày tới: </strong>
                 <br>
@@ -34,7 +33,7 @@
                             <a href="#" class="user-details" data-id="{{ $user->id }}">
                                 <span class="text-primary">{{ $user->full_name }}</span>
                                 <span
-                                    class="text-primary">({{ Carbon::parse($user->date_of_birth)->format('d/m/Y') }})</span>
+                                    class="text-primary">({{ \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') }})</span>
                                 <br>
                             </a>
                         @endif
@@ -185,7 +184,8 @@
                                             <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
                                                     href="#" class="user-details" data-id="{{ $user->id }}">Sửa</a></p>
                                             <a class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"
-                                               data-bs-toggle="modal" data-bs-target="#modal-notification">Xoá</a>
+                                               data-bs-toggle="modal" id="user-delete" data-id="{{ $user->id }}"
+                                               data-bs-target="#modal-notification">Xoá</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -216,8 +216,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"><a
-                            href="#" id="#user-delete" data-id="{{ $user->id }}">Xoá</a></button>
+                    <button type="button" class="btn btn-danger">Xoá
+                    </button>
                     <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -229,7 +229,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="upload-excel">Chọn file cần nhập</h5>
+                    <h5 class="modal-title">Chọn file cần nhập</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -249,79 +249,70 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $('.user-details').click(function (e) {
-                console.log('clicked')
-                e.preventDefault();
+@endsection
 
-                const userId = $(this).data('id');
-
-
-                $.ajax({
-                    url: '/user-details/' + userId,
-                    type: 'GET',
-                    success: function (response) {
-                        console.log(response);
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                    }
-                });
+<script>
+    console.log('user management');
+    $(document).ready(function () {
+        $('#search-customers').keyup(function () {
+            let value = $(this).val().toLowerCase();
+            $("#customers-table tr").each(function () {
+                let name = $(this).find('.search-name').text().toLowerCase();
+                let phone = $(this).find('.search-phone').text().toLowerCase();
+                $(this).toggle(name.indexOf(value) > -1 || phone.indexOf(value) > -1);
             });
         });
 
-        $(document).ready(function () {
-            $('#modal-notification').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var userId = button.data('id');
-                var modal = $(this);
-                modal.find('.btn-danger').data('id', userId);
-            });
+        $('#upload-excel').on('shown.bs.modal', function () {
+            console.log('excel shown');
+            if ($('input[type=file]').val() === "") {
+                $('.btn-success').attr('disabled', true);
+            }
+        });
+        $('input[type=file]').change(function () {
+            if ($('input[type=file]').val() !== "") {
+                $('.btn-success').attr('disabled', false);
+            }
+        });
 
+        $('#modal-notification').on('shown.bs.modal', function () {
+            console.log('shown');
             $('#user-delete').click(function (e) {
                 e.preventDefault();
-
-                let userId = $(this).data('id');
-
-                $.ajax({
-                    url: '/user-details/' + userId,
-                    type: 'DELETE',
-                    success: function (response) {
-                        console.log(response);
-                        location.reload();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
+                const userId = $('#user-delete').data('id');
+                fetch('/users/' + userId, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
+                }).then(response => {
+                    console.log('fetching');
+                    if (response.ok) {
+                        console.log('ok');
+                        $('#modal-notification').modal('hide');
+                        $('#alert').html(
+                            '<div class="alert alert-success" role="alert">' +
+                            '<strong>Thành công!</strong> Xoá khách hàng thành công.' +
+                            '</div>');
+                        setTimeout(function () {
+                            $('#alert').html('');
+                        }, 3000);
+                    } else {
+                        console.log('not ok');
+                        $('#modal-notification').modal('hide');
+                        $('#alert').html(
+                            '<div class="alert alert-danger" role="alert">' +
+                            '<strong>Thất bại!</strong> Xoá khách hàng thất bại.' +
+                            '</div>');
+                        setTimeout(function () {
+                            $('#alert').html('');
+                        }, 3000);
+                    }
+                }).catch(e => {
+                    console.log(e);
                 });
             });
         });
+    });
 
-        $(document).ready(function () {
-            $('#search-customers').keyup(function () {
-                let value = $(this).val().toLowerCase();
-                $("#customers-table tr").each(function () {
-                    let name = $(this).find('.search-name').text().toLowerCase();
-                    let phone = $(this).find('.search-phone').text().toLowerCase();
-                    $(this).toggle(name.indexOf(value) > -1 || phone.indexOf(value) > -1);
-                });
-            });
-        });
-
-        $(document).ready(function () {
-            $('#upload-excel').on('shown.bs.modal', function () {
-                if ($('input[type=file]').val() === "") {
-                    $('.btn-success').attr('disabled', true);
-                }
-            });
-            $('input[type=file]').change(function () {
-                if ($('input[type=file]').val() !== "") {
-                    $('.btn-success').attr('disabled', false);
-                }
-            });
-        });
-
-    </script>
-@endsection
+</script>
