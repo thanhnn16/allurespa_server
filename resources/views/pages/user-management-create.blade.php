@@ -7,7 +7,8 @@
             <div class="row gx-4">
                 <div class="col-auto">
                     <div class="avatar avatar-xl position-relative">
-                        <img src="/img/logo.png" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                        <img src="/img/logo.png" alt="profile_image"
+                             class="w-100 border-radius-lg shadow-sm max-height-250s">
                     </div>
                 </div>
                 <div class="col-auto my-auto">
@@ -53,9 +54,10 @@
                                         <input class="form-control" type="file" name="image" id="image"
                                                accept="image/*"
                                         >
-                                        <img id="avatar" src="/img/logo.png"
-                                             class="max-width-300 mt-3 ms-auto img-circle img-fluid">
-
+                                        <div class="max-height-100 max-width-100 mt-3">
+                                            <img id="avatar" src="/img/logo.png"
+                                                 class="w-100 h-100">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -130,14 +132,16 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
+
+    <script>
+        $('input[type="file"]').on('change', function () {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                console.log(e.target.result);
+                $('#avatar').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
 @endsection
-<script>
-    $('input[type="file"]').on('change', function () {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#avatar').attr('src', e.target.result);
-        };
-        reader.readAsDataURL(this.files[0]);
-    });
-</script>
-</div>
+

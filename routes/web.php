@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
@@ -37,5 +38,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
     Route::get('users/template', [UserController::class, 'template'])->name('users.template');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
+    Route::get('/image-upload', [ImageController::class, 'showUploadForm'])->name('image.upload');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
