@@ -1,22 +1,23 @@
-@extends('layouts.app');
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý khách hàng'])
     <div class="row mt-4 mx-4">
         <div class="col-12">
-            @if (session('error'))
-                <div class="alert alert-danger" role="alert">
-                    <p class="text-white mb-0">
-                        {{ session('error') }}</p>
-                </div>
-            @endif
-            @if(session('success'))
-                <div class="alert alert-success" role="alert">
-                    <p class="text-white mb-0">
-                        {{ session('success') }}</p>
-                </div>
-            @endif
-
+            <div id="alert">
+                @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        <p class="text-white mb-0">
+                            {{ session('error') }}</p>
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success" role="alert">
+                        <p class="text-white mb-0">
+                            {{ session('success') }}</p>
+                    </div>
+                @endif
+            </div>
             <div class="alert alert-white" role="alert">
                 <strong>Khách có sinh nhật trong 15 ngày tới: </strong>
                 <br>
@@ -40,13 +41,14 @@
                     @endif
                 @endforeach
             </div>
+        </div>
             <div class="card mb-4 px-3">
                 <div class="row">
                     <div class="card-header pb-0">
                         <h6>Thêm khách hàng mới</h6>
                     </div>
                     <div class="d-flex justify-content-start align-self-auto py-1 px-2">
-                        <button class="btn bg-gradient-secondary">Thêm khách hàng</button>
+                        <button class="btn bg-gradient-secondary"><a href="/user-management-create" class="link-white">Thêm khách hàng</a></button>
                         <div class="dropdown ps-2">
                             <button class="btn bg-gradient-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -216,9 +218,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger">Xoá
-                    </button>
-                    <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
+                    <form action="/user-management/{{ $user->id }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" id="btn-delete">Xoá
+                        </button>
+                        <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -249,70 +255,35 @@
             </div>
         </div>
     </div>
-@endsection
 
-<script>
-    console.log('user management');
-    $(document).ready(function () {
-        $('#search-customers').keyup(function () {
-            let value = $(this).val().toLowerCase();
-            $("#customers-table tr").each(function () {
-                let name = $(this).find('.search-name').text().toLowerCase();
-                let phone = $(this).find('.search-phone').text().toLowerCase();
-                $(this).toggle(name.indexOf(value) > -1 || phone.indexOf(value) > -1);
-            });
-        });
-
-        $('#upload-excel').on('shown.bs.modal', function () {
-            console.log('excel shown');
-            if ($('input[type=file]').val() === "") {
-                $('.btn-success').attr('disabled', true);
-            }
-        });
-        $('input[type=file]').change(function () {
-            if ($('input[type=file]').val() !== "") {
-                $('.btn-success').attr('disabled', false);
-            }
-        });
-
-        $('#modal-notification').on('shown.bs.modal', function () {
-            console.log('shown');
-            $('#user-delete').click(function (e) {
-                e.preventDefault();
-                const userId = $('#user-delete').data('id');
-                fetch('/users/' + userId, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                }).then(response => {
-                    console.log('fetching');
-                    if (response.ok) {
-                        console.log('ok');
-                        $('#modal-notification').modal('hide');
-                        $('#alert').html(
-                            '<div class="alert alert-success" role="alert">' +
-                            '<strong>Thành công!</strong> Xoá khách hàng thành công.' +
-                            '</div>');
-                        setTimeout(function () {
-                            $('#alert').html('');
-                        }, 3000);
-                    } else {
-                        console.log('not ok');
-                        $('#modal-notification').modal('hide');
-                        $('#alert').html(
-                            '<div class="alert alert-danger" role="alert">' +
-                            '<strong>Thất bại!</strong> Xoá khách hàng thất bại.' +
-                            '</div>');
-                        setTimeout(function () {
-                            $('#alert').html('');
-                        }, 3000);
-                    }
-                }).catch(e => {
-                    console.log(e);
+    <script>
+        $(document).ready(function () {
+            $('#search-customers').keyup(function () {
+                let value = $(this).val().toLowerCase();
+                $("#customers-table tr").each(function () {
+                    let name = $(this).find('.search-name').text().toLowerCase();
+                    let phone = $(this).find('.search-phone').text().toLowerCase();
+                    $(this).toggle(name.indexOf(value) > -1 || phone.indexOf(value) > -1);
                 });
             });
-        });
-    });
 
-</script>
+            $('#upload-excel').on('shown.bs.modal', function () {
+                if ($('input[type=file]').val() === "") {
+                    $('.btn-success').attr('disabled', true);
+                }
+            });
+            $('input[type=file]').change(function () {
+                if ($('input[type=file]').val() !== "") {
+                    $('.btn-success').attr('disabled', false);
+                }
+            });
+
+            $('.btn-success').click(function () {
+                $('#upload-excel').modal('hide');
+            });
+
+        });
+
+    </script>
+@endsection
+

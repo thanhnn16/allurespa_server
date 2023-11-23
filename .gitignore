@@ -17,7 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
+_ide_helper.php
 # Project exclude paths
 /storage/app/
 /storage/framework/

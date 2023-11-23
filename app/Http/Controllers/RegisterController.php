@@ -16,9 +16,8 @@ class RegisterController extends Controller
             'password' => 'required|min:5',
             'terms' => 'required'
         ]);
-        $user = User::create($attributes);
-        auth()->login($user);
-        return redirect('/dashboard');
+        User::create($attributes);
+        return redirect('/login')->with('success', 'Đăng ký thành công. Đăng nhập để tiếp tục.');
     }
 
     public function create()
