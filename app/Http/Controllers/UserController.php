@@ -92,7 +92,7 @@ class UserController extends Controller
             'email' => 'required|unique:users,email',
             'phone_number' => 'required|unique:users,phone_number',
         ]);
-        $data['password'] = bcrypt('123456');
+        $data['password'] = '123456';
 
         try {
             if (request()->hasFile('image')) {

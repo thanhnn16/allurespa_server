@@ -68,8 +68,4 @@ class User extends Authenticatable
         return $this->attributes['password'] = bcrypt($value);
     }
 
-    /**
-     * @param array<string, string> $data
-     * @return User
-     */
 }

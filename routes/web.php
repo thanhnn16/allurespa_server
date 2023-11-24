@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChangePassword;
+use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LoginController;
@@ -20,7 +21,6 @@ Route::get('/register', [RegisterController::class, 'create'])->middleware('gues
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->name('login.perform');
-Route::post('/login-get-token', [LoginController::class, 'loginGetToken'])->middleware('api')->name('login.get.token');
 Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest')->name('reset-password');
 Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
 Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
@@ -46,4 +46,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'api'], function () {
     Route::resource('treatment', TreatmentController::class);
+    Route::resource('cosmetic', CosmeticController::class);
 });
