@@ -58,6 +58,7 @@ class UserController extends Controller
     {
         return view('pages.user-management-create');
     }
+
     public function import(): RedirectResponse
     {
         $import = new UsersImport;
@@ -84,10 +85,46 @@ class UserController extends Controller
         return redirect('/user-management')->with('success', 'Import dữ liệu từ Excel thành công');
     }
 
+    public function store(): JsonResponse
+    {
+        $data = request()->validate([
+            'full_name' => 'required',
+            'email' => 'required|unique:users,email',
+            'phone_number' => 'required|unique:users,phone_number',
+        ]);
+        $data['password'] = bcrypt('123456');
+
+        try {
+            if (request()->hasFile('image')) {
+                $imageController = new ImageController;
+                $imagePath = $imageController->userImageUpload(request());
+                $data['image'] = $imagePath;
+            } else {
+                $data['image'] = '/img/marie.jpg';
+            }
+
+            User::create($data);
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return response()->json([
+                    'error' => 'Email hoặc số điện thoại đã tồn tại trong hệ thống.'
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'success' => 'Thêm người dùng thành công',
+            'data' => $data
+        ]);
+    }
+
     public function template(): BinaryFileResponse
     {
         $file = public_path() . "/templates/import_template.xlsx";
         return response()->download($file, 'import_template.xlsx');
     }
-
 }

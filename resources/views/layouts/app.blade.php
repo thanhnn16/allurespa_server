@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content=" {{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <link rel="icon" type="image/png" href="/img/logo.png">
     <title>
         Allure Spa Dashboard
@@ -20,8 +22,8 @@
     <link href="assets/css/nucleo-svg.css" rel="stylesheet"/>
     <!-- CSS Files -->
     <link id="pagestyle" href="assets/css/argon-dashboard.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -55,6 +57,8 @@
 <script src="assets/js/core/bootstrap.min.js"></script>
 <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -64,7 +68,7 @@
         Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
 </script>
-<!-- Github buttons -->
+<!-- GitHub buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="assets/js/argon-dashboard.js"></script>

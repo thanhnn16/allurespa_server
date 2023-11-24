@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetPassword;
+use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ Route::get('/register', [RegisterController::class, 'create'])->middleware('gues
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->name('login.perform');
+Route::post('/login-get-token', [LoginController::class, 'loginGetToken'])->middleware('api')->name('login.get.token');
 Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest')->name('reset-password');
 Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
 Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
@@ -38,6 +40,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
     Route::get('users/template', [UserController::class, 'template'])->name('users.template');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
-    Route::get('/image-upload', [ImageController::class, 'showUploadForm'])->name('image.upload');
+    Route::post('/user-image-upload', [ImageController::class, 'userImageUpload'])->name('user.image.upload');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
+});
+
+Route::group(['middleware' => 'api'], function () {
+    Route::resource('treatment', TreatmentController::class);
 });
