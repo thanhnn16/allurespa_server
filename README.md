@@ -26,5 +26,6 @@ Hướng dẫn chạy server và test:
     _DB_DATABASE=allure_dev_
     _DB_USERNAME=root_
     _DB_PASSWORD=_**Password của mysql server**
-14. Chạy lệnh `php artisan serve`
-15. Mở trình duyệt và truy cập vào đường dẫn `http://localhost:8000/`
+14. Từ thư mục gốc của project, tìm thư mục storage. Trong thư mục storage tạo các thư mục sau: framework/views, framework/cache/data, logs, app.
+15. Chạy lệnh `php artisan serve`
+16. Mở trình duyệt và truy cập vào đường dẫn `http://localhost:8000/`
