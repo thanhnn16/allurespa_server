@@ -42,162 +42,146 @@
                 @endforeach
             </div>
         </div>
-            <div class="card mb-4 px-3">
-                <div class="row">
-                    <div class="card-header pb-0">
-                        <h6>Thêm khách hàng mới</h6>
-                    </div>
-                    <div class="d-flex justify-content-start align-self-auto py-1 px-2">
-                        <button class="btn bg-gradient-secondary"><a href="/user-management-create" class="link-white">Thêm khách hàng</a></button>
-                        <div class="dropdown ps-2">
-                            <button class="btn bg-gradient-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Nhập / xuất file
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="/users/template">Tải mẫu nhập</a></li>
-                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#upload-excel">Nhập
-                                        từ Excel</a></li>
-                                <li><a class="dropdown-item" href="/users/export">Xuất ra Excel</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card mb-4">
+        <div class="card mb-4 px-3">
+            <div class="row">
                 <div class="card-header pb-0">
-                    <h6>Danh sách khách hàng</h6>
+                    <h6>Thêm khách hàng mới</h6>
                 </div>
-
-                <div class="align-self-auto d-flex py-1 px-3 pb-3">
-                    <div class="input-group">
-                        <input type="text" id="search-customers" class="form-control"
-                               placeholder="Tìm kiếm khách hàng theo tên / số điện thoại"
-                               aria-label="Tìm kiếm khách hàng" aria-describedby="basic-addon2">
-                        <span class="input-group-text"
-                              id="basic-addon2"><i
-                                class="fas fa-search"></i></span>
-                    </div>
-                </div>
-
-                <div class="card-body px-0 pt-0 pb-2">
-                    <div class="table-responsive p-0 min-height-600">
-                        <table class="table align-items-center mb-0">
-                            <thead>
-                            <tr>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Họ tên
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Số
-                                    điện thoại
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Email
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Ngày sinh
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Giới tính
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Địa
-                                    chỉ
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Tình trạng da
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Ghi
-                                    chú
-                                </th>
-                                <th
-                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Ngày tạo
-                                </th>
-                                <th
-                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Ngày cập nhật
-                                </th>
-                                <th
-                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Hành động
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody id="customers-table">
-                            @foreach($users as $user)
-                                @if($user->role == 'admin')
-                                    @continue
-                                @endif
-                                <tr>
-                                    <td class="search-name">
-                                        <div class="d-flex px-3 py-1">
-                                            <div>
-                                                <img
-                                                    src="{{ $user->image == null ? "./img/logo.png" : $user->image }}"
-                                                    class="avatar me-3" alt="image">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">{{ $user->full_name == null ? 'N/A' : $user->full_name }}</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="search-phone">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->phone_number }}</p>
-                                    </td>
-                                    <td class="align-middle text-start text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->email }}</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->date_of_birth != null ? $user->date_of_birth->format('d/m/Y') : 'N/A'}}</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->gender == 0 ? 'Nữ' : 'Nam'}}</p>
-                                    </td>
-                                    <td class="align-middle text-start text-sm ml-1">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->address }}</p>
-                                    </td>
-
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->skin_condition }}</p>
-                                    </td>
-
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->note }}</p>
-                                    </td>
-
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->created_at->format('d/m/Y') }}</p>
-                                    </td>
-
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->updated_at->format('d/m/Y') }}</p>
-                                    </td>
-
-                                    <td class="align-middle text-end">
-                                        <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                            <p class="text-sm font-weight-bold mb-0 cursor-pointer"><a
-                                                    href="#" class="user-details" data-id="{{ $user->id }}">Xem</a>
-                                            </p>
-                                            <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
-                                                    href="#" class="user-details" data-id="{{ $user->id }}">Sửa</a></p>
-                                            <a class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"
-                                               data-bs-toggle="modal" id="user-delete" data-id="{{ $user->id }}"
-                                               data-bs-target="#modal-notification">Xoá</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                <div class="d-flex justify-content-start align-self-auto py-1 px-2">
+                    <button class="btn bg-gradient-secondary"><a href="/user-management-create" class="link-white">Thêm
+                            khách hàng</a></button>
+                    <div class="dropdown ps-2">
+                        <button class="btn bg-gradient-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Nhập / xuất file
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="/users/template">Tải mẫu nhập</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#upload-excel">Nhập
+                                    từ Excel</a></li>
+                            <li><a class="dropdown-item" href="/users/export">Xuất ra Excel</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h6>Danh sách khách hàng</h6>
+            </div>
+
+            <div class="align-self-auto d-flex py-1 px-3 pb-3">
+                <div class="input-group">
+                    <input type="text" id="search-customers" class="form-control"
+                           placeholder="Tìm kiếm khách hàng theo tên / số điện thoại"
+                           aria-label="Tìm kiếm khách hàng" aria-describedby="basic-addon2">
+                    <span class="input-group-text"
+                          id="basic-addon2"><i
+                            class="fas fa-search"></i></span>
+                </div>
+            </div>
+
+            <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0 min-height-600">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                        <tr>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">
+                                Họ tên
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Số
+                                điện thoại
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Email
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Ngày sinh
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Giới tính
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Địa
+                                chỉ
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Tình trạng da
+                            </th>
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Ghi
+                                chú
+                            </th>
+                            <th
+                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Hành động
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="customers-table">
+                        @foreach($users as $user)
+                            @if($user->role == 'admin')
+                                @continue
+                            @endif
+                            <tr>
+                                <td class="search-name">
+                                    <div class="d-flex px-3 py-1">
+                                        <div>
+                                            <img
+                                                src="{{ $user->image == null ? "./img/logo.png" : $user->image }}"
+                                                class="avatar me-3" alt="image">
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{ $user->full_name == null ? 'N/A' : $user->full_name }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="search-phone">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->phone_number }}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->email }}</p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->date_of_birth != null ? $user->date_of_birth->format('d/m/Y') : 'N/A'}}</p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->gender == 0 ? 'Nữ' : 'Nam'}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm ml-1">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->address }}</p>
+                                </td>
+
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->skin_condition }}</p>
+                                </td>
+
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-sm font-weight-bold mb-0">{{ $user->note }}</p>
+                                </td>
+                                <td class="align-middle text-end">
+                                    <div class="d-flex px-3 py-1 justify-content-center align-items-center">
+                                        <p class="text-sm font-weight-bold mb-0 cursor-pointer"><a
+                                                href="#" class="user-details" data-id="{{ $user->id }}">Xem</a>
+                                        </p>
+                                        <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
+                                                href="#" class="user-details" data-id="{{ $user->id }}">Sửa</a></p>
+                                        <a class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer user-delete"
+                                           data-bs-toggle="modal" data-id="{{ $user->id }}"
+                                           data-bs-target="#modal-notification">Xoá</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
@@ -218,13 +202,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form action="/user-management/{{ $user->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" id="btn-delete">Xoá
-                        </button>
-                        <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
-                    </form>
+                    <button type="button" class="btn btn-danger" id="btn-delete">Xoá
+                    </button>
+                    <button type="button" class="btn btn-default ml-auto" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -282,6 +262,14 @@
                 $('#upload-excel').modal('hide');
             });
 
+            $('#modal-notification').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget);
+                const id = button.data('id');
+                $('#btn-delete').off('click').on('click', function (e) {
+                    console.log(id);
+                    console.log(this);
+                });
+            });
         });
 
     </script>
