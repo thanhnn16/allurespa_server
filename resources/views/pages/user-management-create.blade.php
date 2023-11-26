@@ -45,7 +45,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form role="form" method="POST"
+                    <form role="form" method="POST" id="form-add-user"
                           action={{ route('user-management.store') }} enctype="multipart/form-data">
                         @csrf
                         <div class="card-header pb-0">
@@ -76,7 +76,7 @@
                                 <div class="col-md-12 mt-1">
                                     <div class="d-flex justify-content-start">
                                         <img id="croppedImage" src="#" alt="Cropped image" style="display:
-                                none;" class="img-thumbnail">
+                                none;" class="img-thumbnail max-width-200">
                                     </div>
                                 </div>
                             </div>
@@ -185,6 +185,30 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="statusSuccessModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
+         data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center p-md-4">
+                    <svg version="1.1" class="max-width-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10"
+                                cx="65.1" cy="65.1" r="62.1"/>
+                        <polyline class="path check" fill="none" stroke="#198754" stroke-width="6"
+                                  stroke-linecap="round" stroke-miterlimit="10"
+                                  points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                    </svg>
+                    <h4 class="text-success mt-3">Thành công!</h4>
+                    <p class="mt-3">Thêm khách hàng mới thành công.</p>
+                    <button type="button" class="btn btn-sm mt-3 btn-gradient-dark" id="ok-button" data-bs-dismiss="modal">
+                        Quay lại
+                    </button>
+                    <button type="button" class="btn btn-sm mt-3 btn-success" id="add-more-button"
+                            data-bs-dismiss="modal">Thêm tiếp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function () {
@@ -240,24 +264,16 @@
 
             $('.btn-add').on('click', function (e) {
                 e.preventDefault();
-                const formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('full_name', $('input[name="full_name"]').val());
-                formData.append('email', $('input[name="email"]').val());
-                formData.append('phone_number', $('input[name="phone_number"]').val());
-                formData.append('date_of_birth', $('input[name="date_of_birth"]').val());
-                formData.append('gender', $('select[name="gender"]').val());
-                formData.append('address', $('input[name="address"]').val());
-                formData.append('skin_condition', $('textarea[name="skin_condition"]').val());
-                formData.append('note', $('textarea[name="note"]').val());
-                console.log(formData.get('date_of_birth'));
+                const formData = new FormData($('#form-add-user')[0]);
+                for (const pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
 
                 const image = $('#image');
                 if (image.val()) {
-                    const file = dataURLtoFile(croppedImageDataURL, formData.get('phone_number') + '.png');
+                    const file = dataURLtoFile(croppedImageDataURL, $('input[name="phone_number"]').val() + '.png');
                     formData.append('image', file);
                     console.log('filename: ' + file.name);
-                    console.log(formData.get('image'));
                 }
                 $.ajax({
                     url: '{{ route('user-management.store') }}',
@@ -271,20 +287,24 @@
                             $('.message').html(`<p class="text-danger">${response.error}</p>`);
                         } else if (response.success) {
                             $('.message').html(`<p class="text-success">${response.success}</p>`);
-                            setTimeout(function () {
+                            $('#statusSuccessModal').modal('show');
+                            $('#ok-button').on('click', function () {
                                 window.location.href = '{{ route('user-management') }}';
-                            }, 50000);
+                            });
+                            $('#add-more-button').on('click', function () {
+                                window.location.href = '{{ route('user-management.create') }}';
+                            });
+
                         }
                     },
                     error: function (data) {
-                        console.log(data.responseJSON);
+                        console.log(data);
                         let errors = data.responseJSON.errors;
                         let errorMessages = '';
                         for (const key in errors) {
                             errorMessages += `<p class="text-danger">${errors[key]}</p>`;
                         }
                         $('.message').html(errorMessages);
-
                     }
                 });
             });

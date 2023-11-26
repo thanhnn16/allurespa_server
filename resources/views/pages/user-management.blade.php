@@ -138,7 +138,7 @@
                                         <div class="d-flex px-3 py-1">
                                             <div>
                                                 <img
-                                                    src="{{ $user->avatar == null ? "./img/logo.png" : $user->avatar }}"
+                                                    src="{{ $user->image == null ? "./img/logo.png" : $user->image }}"
                                                     class="avatar me-3" alt="image">
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">

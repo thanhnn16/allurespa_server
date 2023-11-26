@@ -91,18 +91,25 @@ class UserController extends Controller
             'full_name' => 'required',
             'email' => 'required|unique:users,email',
             'phone_number' => 'required|unique:users,phone_number',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:1,0',
+            'address' => 'nullable',
+            'skin_condition' => 'nullable',
+            'note' => 'nullable',
         ]);
         $data['password'] = '123456';
+        $data['role'] = 'users';
 
         try {
             if (request()->hasFile('image')) {
                 $imageController = new ImageController;
                 $imagePath = $imageController->userImageUpload(request());
-                $data['image'] = $imagePath;
+                $imagePath = explode('/', $imagePath);
+                $imagePath = $imagePath[count($imagePath) - 1];
+                $data['image'] = "/uploads/img/users/avatar/" . $imagePath;
             } else {
                 $data['image'] = '/img/marie.jpg';
             }
-
             User::create($data);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
