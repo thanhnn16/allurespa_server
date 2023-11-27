@@ -21,6 +21,16 @@
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'chat' ? 'active' : '' }}"
+                   href="{{ route('chat') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-chat-round text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Chat</span>
+                </a>
+            </li>
             <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                 </div>
@@ -37,7 +47,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'user-management') == true ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'user-management' ? 'active' : '' }}"
                    href="{{ route('page', ['page' => 'user-management']) }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -46,11 +56,51 @@
                     <span class="nav-link-text ms-1">Quản lý khách hàng</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'treatment-management' ? 'active' : '' }}"
+                   href="{{ route('page', ['page' => 'treatment-management']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bullet-list-67 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Quản lý liệu trình</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'cosmetic-management' ? 'active' : '' }}"
+                   href="{{ route('page', ['page' => 'cosmetic-management']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bullet-list-67 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Quản lý mỹ phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'appointment-management' ? 'active' : '' }}"
+                   href="{{ route('page', ['page' => 'appointment-management']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bullet-list-67 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Quản lý lịch hẹn</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'user-management' ? 'active' : '' }}"
+                   href="{{ route('page', ['page' => 'cosmetic-management']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bullet-list-67 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Xem bình luận, đánh giá</span>
+                </a>
+            </li>
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Liên kết</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'tables' ? 'active' : '' }}"
                    href="{{ route('page', ['page' => 'tables']) }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -60,7 +110,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{  str_contains(request()->url(), 'billing') == true ? 'active' : '' }}"
+                <a class="nav-link {{  Route::currentRouteName() == 'billing' ? 'active' : '' }}"
                    href="{{ route('page', ['page' => 'billing']) }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -68,9 +118,6 @@
                     </div>
                     <span class="nav-link-text ms-1">Billing</span>
                 </a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
         </ul>
     </div>

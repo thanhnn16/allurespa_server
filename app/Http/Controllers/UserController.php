@@ -12,33 +12,45 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
-    public function index(): \Illuminate\Foundation\Application|Factory|View|Application
+    public function index(Request $request): \Illuminate\Foundation\Application|Factory|View|Application
     {
-        $users = User::all();
-
+        $usersPerPage = $request->get('usersPerPage', 10);
+        $users = User::where('role', 'users')
+            ->where(function ($query) use ($request) {
+                $query->where('full_name', 'like', '%' . $request->get('search', '') . '%')
+                    ->orWhere('phone_number', 'like', '%' . $request->get('search', '') . '%');
+            })
+            ->paginate($usersPerPage);
         return view('pages.user-management', ['users' => $users]);
     }
 
-
-    public function show(User $user): JsonResponse
+    public function show(User $id): JsonResponse
     {
-        return response()->json($user);
+        return response()->json([
+            'user' => $id
+        ]);
     }
 
-    public function delete($id): Application|\Illuminate\Foundation\Application|RedirectResponse|Redirector
+    public function delete($id): JsonResponse
     {
         $user = User::find($id);
         if ($user) {
             $user->delete();
-            return redirect('/user-management')->with('success', 'Xóa người dùng thành công');
+            return
+                response()->json([
+                    'success' => 'Xóa người dùng thành công'
+                ]);
         } else {
-            return redirect('/user-management')->with('error', 'Có lỗi xảy ra trong quá trình xóa người dùng');
+            return
+                response()->json([
+                    'error' => 'Người dùng không tồn tại'
+                ]);
         }
     }
 
@@ -127,6 +139,13 @@ class UserController extends Controller
             'success' => 'Thêm người dùng thành công',
             'data' => $data
         ]);
+    }
+
+    public function deleteSelected(Request $request)
+    {
+        $ids = $request->get('selectedIds');
+        User::whereIn('id', $ids)->delete();
+        return response()->json(['success' => 'Xóa người dùng thành công']);
     }
 
     public function template(): BinaryFileResponse

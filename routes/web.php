@@ -31,16 +31,47 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+//    route for user management
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
-    Route::get('/user-details/{id}', [UserController::class, 'show'])->name('user-details');
+    Route::get('/user-management/{id}', [UserController::class, 'show'])->name('user-management.show');
     Route::get('/user-management-create', [UserController::class, 'create'])->name('user-management.create');
     Route::post('/user-management-create', [UserController::class, 'store'])->name('user-management.store');
     Route::delete('/user-management/{id}', [UserController::class, 'delete'])->name('user-management.delete');
-    Route::get('/home', [HomeController::class, 'home'])->name('home');
+    Route::post('/user-management/delete-selected', [UserController::class, 'deleteSelected'])->name('user-management.delete-selected');
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
     Route::get('users/template', [UserController::class, 'template'])->name('users.template');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::post('/user-image-upload', [ImageController::class, 'userImageUpload'])->name('user.image.upload');
+
+//    route for treatment management
+    Route::get('/treatment-management', [TreatmentController::class, 'index'])->name('treatment-management');
+    Route::get('/treatment-management/{id}', [TreatmentController::class, 'show'])->name('treatment-management.show');
+    Route::get('/treatment-management-create', [TreatmentController::class, 'create'])->name('treatment-management.create');
+    Route::post('/treatment-management-create', [TreatmentController::class, 'store'])->name('treatment-management.store');
+    Route::delete('/treatment-management/{id}', [TreatmentController::class, 'delete'])->name('treatment-management.delete');
+    Route::post('/treatment-management/delete-selected', [TreatmentController::class, 'deleteSelected'])->name('treatment-management.delete-selected');
+    Route::get('treatment/export', [TreatmentController::class, 'export'])->name('treatment.export');
+    Route::get('treatment/template', [TreatmentController::class, 'template'])->name('treatment.template');
+    Route::post('treatment/import', [TreatmentController::class, 'import'])->name('treatment.import');
+    Route::post('/treatment-image-upload', [ImageController::class, 'treatmentImageUpload'])->name('treatment.image.upload');
+
+
+//    route for cosmetic management
+    Route::get('/cosmetic-management', [CosmeticController::class, 'index'])->name('cosmetic-management');
+    Route::get('/cosmetic-management/{id}', [CosmeticController::class, 'show'])->name('cosmetic-management.show');
+    Route::get('/cosmetic-management-create', [CosmeticController::class, 'create'])->name('cosmetic-management.create');
+    Route::post('/cosmetic-management-create', [CosmeticController::class, 'store'])->name('cosmetic-management.store');
+    Route::delete('/cosmetic-management/{id}', [CosmeticController::class, 'delete'])->name('cosmetic-management.delete');
+    Route::post('/cosmetic-management/delete-selected', [CosmeticController::class, 'deleteSelected'])->name('cosmetic-management.delete-selected');
+    Route::get('cosmetic/export', [CosmeticController::class, 'export'])->name('cosmetic.export');
+    Route::get('cosmetic/template', [CosmeticController::class, 'template'])->name('cosmetic.template');
+    Route::post('cosmetic/import', [CosmeticController::class, 'import'])->name('cosmetic.import');
+    Route::post('/cosmetic-image-upload', [ImageController::class, 'cosmeticImageUpload'])->name('cosmetic.image.upload');
+
+//    route for home
+    Route::get('/home', [HomeController::class, 'home'])->name('home');
+    Route::get('/chat', [PageController::class, 'chat'])->name('chat');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
 

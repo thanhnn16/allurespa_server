@@ -3,16 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cosmetic;
+use App\Models\Treatment;
+use Illuminate\Contracts\Foundation\Application as ViewApplication;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CosmeticController extends Controller
 {
-    public function index()
+    public function index(Request $request): ViewApplication|Factory|View|Application|JsonResponse
     {
-        Cosmetic::all();
-        return response()->json([
-            'cosmetics' => Cosmetic::all()
-        ]);
+        $cosmeticsPerPage = $request->get('cosmeticsPerPage', 10);
+
+        $cosmetics = Cosmetic::query()
+            ->where(function ($query) use ($request) {
+                $query->where('cosmetic_name', 'like', '%' . $request->get('search', '') . '%');
+            })
+            ->join('cosmetic_categories', 'cosmetic_categories.id', '=', 'cosmetics.cosmetic_category_id')
+            ->select('cosmetics.*', 'cosmetic_categories.cosmetic_category_name')
+            ->paginate($cosmeticsPerPage);
+
+        if ($request->wantsJson()) {
+            return response()->json(['cosmetics' => $cosmetics]);
+        }
+
+        return view('pages.cosmetic-management', ['cosmetics' => $cosmetics]);
     }
 
     public function store(Request $request)

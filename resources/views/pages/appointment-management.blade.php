@@ -1,8 +1,7 @@
-@php use Carbon\Carbon; @endphp
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý khách hàng'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý mỹ phẩm'])
     <div class="row mt-4 mx-4">
         <div class="col-12">
             <div id="alert">
@@ -19,36 +18,15 @@
                     </div>
                 @endif
             </div>
-            <div class="alert alert-white" role="alert">
-                <strong>Khách có sinh nhật trong 15 ngày tới: </strong>
-                <br>
-                @foreach($users as $user)
-                    @if($user->date_of_birth != null)
-                        @php
-                            $birthday = date('m-d', strtotime($user->date_of_birth));
-                            $in15days = date('m-d', strtotime('+15 days'));
-                        @endphp
-                        @if($birthday <= $in15days)
-                            <a href="#" class="user-details" data-bs-target="#user-information" data-bs-toggle="modal"
-                               data-id="{{ $user->id }}">
-                                <span class="text-primary">{{ $user->full_name }}</span>
-                                <span
-                                    class="text-primary">({{ Carbon::parse($user->date_of_birth)->format('d/m/Y') }})</span>
-                                <br>
-                            </a>
-                        @endif
-                    @endif
-                @endforeach
-            </div>
         </div>
         <div class="card mb-4 px-3">
             <div class="row">
                 <div class="card-header pb-0">
-                    <h6>Thêm khách hàng mới</h6>
+                    <h6>Thêm mỹ phẩm mới</h6>
                 </div>
                 <div class="d-flex justify-content-start align-self-auto py-1 px-2">
                     <button class="btn bg-gradient-secondary"><a href="/user-management-create" class="link-white">Thêm
-                            khách hàng</a></button>
+                            mỹ phẩm</a></button>
                     <div class="dropdown ps-2">
                         <button class="btn bg-gradient-secondary dropdown-toggle" type="button"
                                 id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,19 +44,19 @@
         </div>
         <div class="card mb-4">
             <div class="card-header pb-0">
-                <h6>Danh sách khách hàng</h6>
+                <h6>Danh sách mỹ phẩm</h6>
             </div>
 
-            @if($users->isEmpty())
+            @if($cosmetics->isEmpty())
                 <div class="alert">
-                    <h4 class="text-center">Không có khách hàng nào</h4>
+                    <h4 class="text-center">Không có mỹ phẩm nào</h4>
                 </div>
             @else
                 <div class="align-self-auto d-flex py-1 px-3 pb-3">
                     <div class="input-group">
                         <input type="text" id="search-customers" class="form-control"
-                               placeholder="Tìm kiếm khách hàng theo tên / số điện thoại"
-                               aria-label="Tìm kiếm khách hàng" aria-describedby="basic-addon2">
+                               placeholder="Tìm kiếm mỹ phẩm theo tên"
+                               aria-label="Tìm kiếm mỹ phẩm" aria-describedby="basic-addon2">
                         <span class="input-group-text"
                               id="basic-addon2"><i
                                 class="fas fa-search"></i></span>
@@ -87,45 +65,46 @@
                 <button id="back-button" class="btn btn-secondary" style="display: none">Quay lại</button>
 
                 <div class="form-group py-1 px-3 flex flex-row mt-3 justify-content-start align-items-center">
-                    <label for="usersPerPage" class="form-label">Số khách hàng trên mỗi trang: </label>
-                    <select id="numUsersPerPage" class="form-select w-30" name="numUsersPerPage"
+                    <label for="cosmeticsPerPage" class="form-label">Số mỹ phẩm trên mỗi trang: </label>
+                    <select id="cosmeticsPerPage" class="form-select w-30" name="cosmeticsPerPage"
                             onchange="location = this.value;">
-                        <option value="?usersPerPage=10&page=1">10</option>
-                        <option value="?usersPerPage=20&page=1">20</option>
-                        <option value="?usersPerPage=50&page=1">50</option>
+                        <option value="?cosmeticsPerPage=10&page=1">10</option>
+                        <option value="?cosmeticsPerPage=20&page=1">20</option>
+                        <option value="?cosmeticsPerPage=50&page=1">50</option>
                     </select>
                 </div>
 
                 <div class="pagination-info">
-                    Trang {{ $users->currentPage() }} trên tổng số {{ $users->lastPage() }} trang
+                    Trang {{ $cosmetics->currentPage() }} trên tổng số {{ $cosmetics->lastPage() }} trang
 
                     <ul class="pagination my-2">
-                        @if ($users->onFirstPage())
+                        @if ($cosmetics->onFirstPage())
                             <li class="page-item disabled">
-                                <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1"
+                                <a class="page-link" href="{{ $cosmetics->previousPageUrl() }}" tabindex="-1"
                                    aria-disabled="true"><</a>
                             </li>
                         @else
                             <li class="page-item">
-                                <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1"
+                                <a class="page-link" href="{{ $cosmetics->previousPageUrl() }}" tabindex="-1"
                                    aria-disabled="true"><</a>
                             </li>
                         @endif
-                        @for($i = 1; $i <= $users->lastPage(); $i++)
-                            @if($users->currentPage() == $i)
+                        @for($i = 1; $i <= $cosmetics->lastPage(); $i++)
+                            @if($cosmetics->currentPage() == $i)
                                 <li class="page-item active" aria-current="page">
-                                    <a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
+                                    <a class="page-link" href="{{ $cosmetics->url($i) }}">{{ $i }}</a>
                                 </li>
                             @else
-                                <li class="page-item"><a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
+                                <li class="page-item"><a class="page-link"
+                                                         href="{{ $cosmetics->url($i) }}">{{ $i }}</a>
                                 </li>
                             @endif
                         @endfor
 
-                        @if($users->hasMorePages())
+                        @if($cosmetics->hasMorePages())
                             <li class="page-item">
-                                <a class="page-link {{ $users->currentPage() == $users->lastPage() ? 'active' : '' }}"
-                                   href="{{ $users->nextPageUrl() }}">></a>
+                                <a class="page-link {{ $cosmetics->currentPage() == $cosmetics->lastPage() ? 'active' : '' }}"
+                                   href="{{ $cosmetics->nextPageUrl() }}">></a>
                             </li>
                         @else
                             <li class="page-item disabled">
@@ -144,21 +123,16 @@
                                            id="check-all">
                                 </th>
                                 <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Họ tên
+                                    Tên mỹ phẩm
                                 </th>
                                 <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Số
-                                    điện thoại
+                                    Loại mỹ phẩm
                                 </th>
                                 <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Ngày sinh
+                                    Mô tả
                                 </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Giới tính
-                                </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Ghi
-                                    chú
+                                <th class="text-uppercase text-center max-width-200 text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Giá
                                 </th>
                                 <th
                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -167,48 +141,45 @@
                             </tr>
                             </thead>
                             <tbody id="customers-table">
-                            @foreach($users as $user)
+                            @foreach($cosmetics as $cosmetic)
                                 <tr>
                                     <td class="align-middle text-center">
                                         <input type="checkbox"
                                                class="user-checkbox bg-gradient-faded-dark form-check-input"
-                                               id="check-{{ $user->id }}">
+                                               id="check-{{ $cosmetic->id }}">
                                     </td>
-                                    <td class="search-name">
+                                    <td class="align-middle text-center text-sm">
                                         <div class="d-flex px-3 py-1">
                                             <div>
                                                 <img
-                                                    src="{{ $user->image == null ? "./img/logo.png" : $user->image }}"
+                                                    src="{{ $cosmetic->image == null ? "./img/logo.png" : $cosmetic->image }}"
                                                     class="avatar me-3" alt="image">
                                             </div>
                                             <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">{{ $user->full_name == null ? 'N/A' : $user->full_name }}</h6>
+                                                <h6 class="mb-0 text-sm">{{ $cosmetic->cosmetic_name == null ? 'N/A' : $cosmetic->treatment_name }}</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="search-phone">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->phone_number }}</p>
+                                    <td class="align-middle text-center text-sm">
+                                        <p class="text-sm font-weight-bold mb-0">{{ $cosmetic->cosmetic_category_name }}</p>
+                                    </td>
+                                    <td class="align-middle text-start text-sm max-width-200">
+                                        <p class="text-sm font-weight-bold mb-0 overflow-hidden whitespace-nowrap" style="text-overflow: ellipsis!important;">{{ $cosmetic->description != null ? $cosmetic->description : 'N/A'}}</p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->date_of_birth != null ? $user->date_of_birth->format('d/m/Y') : 'N/A'}}</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->gender == 0 ? 'Nữ' : 'Nam'}}</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $user->note }}</p>
+                                        <p class="text-sm font-weight-bold mb-0">{{ number_format($cosmetic->price, 0, ',', '.') }} VNĐ</p>
                                     </td>
                                     <td class="align-middle text-end">
                                         <div class="d-flex px-3 py-1 justify-content-center align-items-center">
                                             <a class="text-sm font-weight-bold mb-0 cursor-pointer"
                                                data-bs-toggle="modal"
                                                data-bs-target="#user-information"
-                                               href="#" data-id="{{ $user->id }}">Xem
+                                               href="#" data-id="{{ $cosmetic->id }}">Xem
                                             </a>
                                             <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
-                                                    href="#" data-id="{{ $user->id }}">Sửa</a></p>
+                                                    href="#" data-id="{{ $cosmetic->id }}">Sửa</a></p>
                                             <a class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer user-delete"
-                                               data-bs-toggle="modal" data-id="{{ $user->id }}"
+                                               data-bs-toggle="modal" data-id="{{ $cosmetic->id }}"
                                                data-bs-target="#modal-notification">Xoá</a>
                                         </div>
                                     </td>
@@ -242,7 +213,7 @@
                     <div class="py-3 text-center">
                         <i class="ni ni-bell-55 ni-3x"></i>
                         <h4 class="text-gradient text-danger mt-4">Bạn có chắc muốn xoá?</h4>
-                        <p>Sau khi bạn xoá khách hàng này, bạn sẽ không thể hoàn tác việc xoá, có xác nhận xoá?</p>
+                        <p>Sau khi bạn xoá mỹ phẩm này, bạn sẽ không thể hoàn tác việc xoá, có xác nhận xoá?</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -293,7 +264,7 @@
                                   points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                     </svg>
                     <h4 class="text-success mt-3">Thành công!</h4>
-                    <p class="mt-3">Xoá khách hàng thành công.</p>
+                    <p class="mt-3">Xoá mỹ phẩm thành công.</p>
                     <button type="button" class="btn btn-sm mt-3 btn-gradient-dark" id="ok-button"
                             data-bs-dismiss="modal">
                         Quay lại
@@ -307,7 +278,7 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable ms-auto">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thông tin khách hàng</h5>
+                    <h5 class="modal-title">Thông tin mỹ phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -500,7 +471,7 @@
                 });
 
                 if (selectedIds.length > 0) {
-                    let confirmDelete = confirm('Bạn có chắc muốn xoá những khách hàng đã chọn?\nThao tác này không thể hoàn tác.');
+                    let confirmDelete = confirm('Bạn có chắc muốn xoá những mỹ phẩm đã chọn?\nThao tác này không thể hoàn tác.');
                     if (!confirmDelete) {
                         return;
                     }
@@ -525,12 +496,12 @@
             });
 
             let urlParams = new URLSearchParams(window.location.search);
-            let usersPerPage = urlParams.get('usersPerPage');
+            let cosmeticsPerPage = urlParams.get('cosmeticsPerPage');
             let search = urlParams.get('search');
-            if (usersPerPage) {
-                $('#numUsersPerPage').val('?usersPerPage=' + usersPerPage + '&page={{ $users->currentPage() }}');
+            if (cosmeticsPerPage) {
+                $('#cosmeticsPerPage').val('?cosmeticsPerPage=' + cosmeticsPerPage + '&page={{ $cosmetics->currentPage() }}');
             } else {
-                $('#numUsersPerPage').val('?usersPerPage=10&page={{ $users->currentPage() }}');
+                $('#cosmeticsPerPage').val('?cosmeticsPerPage=10&page={{ $cosmetics->currentPage() }}');
             }
             if (search) {
                 $('#search-customers').val(search);
