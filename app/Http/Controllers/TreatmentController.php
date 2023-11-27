@@ -24,7 +24,7 @@ class TreatmentController extends Controller
             ->paginate($treatmentsPerPage);
 
         if ($request->wantsJson()) {
-            return response()->json(['treatments' => $treatments]);
+            return response()->json(['treatments' => Treatment::all()]);
         }
 
         return view('pages.treatment-management', ['treatments' => $treatments]);

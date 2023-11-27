@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\HomeController;
@@ -69,6 +70,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('cosmetic/import', [CosmeticController::class, 'import'])->name('cosmetic.import');
     Route::post('/cosmetic-image-upload', [ImageController::class, 'cosmeticImageUpload'])->name('cosmetic.image.upload');
 
+//    route for appointment
+    Route::get('/appointment-management', [AppointmentController::class, 'index'])->name('appointment-management');
+    Route::get('/appointment-management/{id}', [AppointmentController::class, 'show'])->name('appointment-management.show');
+    Route::get('/appointment-management-create', [AppointmentController::class, 'create'])->name('appointment-management.create');
+    Route::post('/appointment-management', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.store');
+
 //    route for home
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('/chat', [PageController::class, 'chat'])->name('chat');
@@ -78,4 +85,5 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'api'], function () {
     Route::resource('treatment', TreatmentController::class);
     Route::resource('cosmetic', CosmeticController::class);
+    Route::resource('appointment', AppointmentController::class);
 });

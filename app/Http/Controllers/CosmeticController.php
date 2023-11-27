@@ -26,7 +26,7 @@ class CosmeticController extends Controller
             ->paginate($cosmeticsPerPage);
 
         if ($request->wantsJson()) {
-            return response()->json(['cosmetics' => $cosmetics]);
+            return response()->json(['cosmetics' => Cosmetic::all()]);
         }
 
         return view('pages.cosmetic-management', ['cosmetics' => $cosmetics]);

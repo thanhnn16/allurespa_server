@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TreatmentController;
@@ -30,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         return $request->user();
     });
 
-
-
-
+    Route::get('appointments', [AppointmentController::class, 'index']);
+    Route::get('appointments/{id}', [AppointmentController::class, 'show']);
+    Route::post('appointments', [AppointmentController::class, 'store']);
 });
