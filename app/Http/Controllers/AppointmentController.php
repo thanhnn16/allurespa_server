@@ -86,4 +86,17 @@ class AppointmentController extends Controller
             'appointment' => $appointment
         ]);
     }
+
+    public function show($id): JsonResponse
+    {
+        $appointment = Appointment::query()
+            ->where('appointments.id', $id)
+            ->join('users', 'users.id', '=', 'appointments.user_id')
+            ->join('treatments', 'treatments.id', '=', 'appointments.treatment_id')
+            ->select('appointments.*', 'users.full_name', 'users.phone_number', 'treatments.treatment_name', 'treatments.price')
+            ->first();
+        return response()->json([
+            'appointment' => $appointment,
+        ]);
+    }
 }

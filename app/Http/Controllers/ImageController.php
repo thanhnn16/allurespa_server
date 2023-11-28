@@ -25,4 +25,14 @@ class ImageController extends Controller
 
         return $imagePath;
     }
+
+    public function deleteImage($imageName): bool
+    {
+        $imagePath = public_path('uploads/img/users/avatar/' . $imageName);
+        if (file_exists($imagePath)) {
+            @unlink($imagePath);
+            return true;
+        }
+        return false;
+    }
 }

@@ -30,11 +30,20 @@ class UserController extends Controller
         return view('pages.user-management', ['users' => $users]);
     }
 
-    public function show(User $id): JsonResponse
+    public function show($id): JsonResponse
     {
-        return response()->json([
-            'user' => $id
-        ]);
+        $user = User::with('appointments')
+            ->find($id);
+        if ($user) {
+            return response()->json([
+                'user' => $user,
+                'appointment' => $user->appointments
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'User not found'
+            ], 404);
+        }
     }
 
     public function delete($id): JsonResponse
@@ -141,10 +150,34 @@ class UserController extends Controller
         ]);
     }
 
-    public function deleteSelected(Request $request)
+    public function deleteSelected(Request $request): JsonResponse|Red
     {
         $ids = $request->get('selectedIds');
-        User::whereIn('id', $ids)->delete();
+        $errors = [];
+
+        foreach ($ids as $id) {
+            $user = User::find($id);
+            if (!$user) {
+                continue;
+            }
+            if ($user->appointments()->exists()) {
+                $errors[] = 'Không thể xóa người dùng ' . $user->full_name . ' vì người dùng này đã có lịch hẹn';
+                continue;
+            }
+            if ($user->image != '/img/marie.jpg' || $user->image === '') {
+                $imageController = new ImageController;
+                if (!$imageController->deleteImage($user->image)) {
+                    $errors[] = 'Không thể xóa ảnh của người dùng ' . $user->full_name;
+                    continue;
+                }
+            }
+            $user->delete();
+        }
+
+        if (!empty($errors)) {
+            return response()->json(['error' => $errors]);
+        }
+
         return response()->json(['success' => 'Xóa người dùng thành công']);
     }
 

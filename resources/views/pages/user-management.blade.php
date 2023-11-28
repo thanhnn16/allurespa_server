@@ -383,6 +383,11 @@
 
     <script>
         $(document).ready(function () {
+            let sessionError = sessionStorage.getItem('error');
+            if (sessionError) {
+                $('#alert').html('<div class="alert alert-danger" role="alert"><p class="text-white text-lg text-bold mb-0">' + sessionError + '</p></div>');
+                sessionStorage.removeItem('error');
+            }
             $('#check-all').change(function () {
                 if ($(this).is(':checked')) {
                     $('input[type=checkbox]').prop('checked', true);
@@ -469,15 +474,14 @@
                     url: 'user-management/' + id,
                     type: 'GET',
                     success: function (response) {
-                        console.log(response);
+                        console.log(response)
                         if (response.error) {
-                            console.log(response.error);
+                            sessionStorage.setItem('error', response.error);
                         } else {
                             let img = response.user.image == null ? "./img/logo.png" : response.user.image;
                             let dob = response.user.date_of_birth == null ? 'N/A' : response.user.date_of_birth;
                             dob = new Date(dob);
                             dob = dob.toLocaleDateString('vi-VN');
-                            console.log(dob)
                             $('#user-image').attr('src', img);
                             $('input[name=full_name]').val(response.user.full_name);
                             $('input[name=email]').val(response.user.email);
@@ -485,7 +489,7 @@
                             $('input[name=address]').val(response.user.address);
                             $('input[name=date_of_birth]').val(dob);
                             $('input[name=note]').val(response.user.note);
-                            $('#appointment-history').html(response.appointment_history);
+                            $('#appointment-history').html(response.appointment.appointment_date);
                             $('#service-history').html(response.service_history);
                         }
                     },
@@ -497,6 +501,7 @@
                 $('.user-checkbox:checked').each(function () {
                     let id = $(this).attr('id').replace('check-', '');
                     selectedIds.push(id);
+                    console.log(selectedIds)
                 });
 
                 if (selectedIds.length > 0) {
@@ -515,8 +520,10 @@
                         },
                         success: function (response) {
                             if (response.error) {
-                                console.log(response.error);
+                                sessionStorage.setItem('error', response.error);
+                                location.reload();
                             } else {
+                                $('#statusSuccessModal').modal('show');
                                 location.reload();
                             }
                         },
@@ -535,8 +542,7 @@
             if (search) {
                 $('#search-customers').val(search);
                 if (search) {
-                    $('#back-button').attr('style', 'display: block');
-                    $('#back-button').click(function () {
+                    $('#back-button').attr('style', 'display: block').click(function () {
                         window.location.href = '/user-management';
                     });
                 }
