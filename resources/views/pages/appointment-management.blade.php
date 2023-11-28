@@ -43,64 +43,64 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Họ và tên khách hàng</label>
-                                <input class="form-control" disabled type="text" name="full_name"
-                                       value="">
+                                <label for="example-text-input" class="form-control-label">Họ và tên khách hàng
+                                    <input class="form-control" disabled type="text" name="full_name"
+                                           value=""></label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Email: </label>
-                                <input class="form-control disabled" disabled type="email" name="email"
-                                       value="">
+                                <label for="email" class="form-control-label">Email
+                                    <input class="form-control disabled" id="email" autocomplete="email" disabled type="email" name="email"
+                                           value=""></label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Số điện thoại: </label>
-                                <input class="form-control disabled" disabled type="tel" name="phone_number"
-                                       value="">
+                                <label for="phone_number" class="form-control-label">Số điện thoại
+                                    <input class="form-control disabled" id="phone_number" disabled type="tel" name="phone_number"
+                                           value=""></label>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Tên liệu trình</label>
-                                <input class="form-control" disabled type="text" name="treatment_name"
-                                       value="">
+                                <label for="example-text-input" class="form-control-label">Tên liệu trình
+                                    <input class="form-control" disabled type="text" name="treatment_name"
+                                           value=""></label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="appointment_date" class="form-control-label">Thời gian</label>
-                                <input class="form-control" disabled type="text" name="appointment_date"
-                                       value="">
+                                <label for="appointment_date" class="form-control-label">Thời gian
+                                    <input class="form-control" disabled type="text" name="appointment_date"
+                                           value=""></label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="treatment_price" class="form-control-label">Giá</label>
-                                <input class="form-control" disabled type="text" name="treatment_price"
-                                       value="">
+                                <label for="treatment_price" class="form-control-label">Giá
+                                    <input class="form-control" disabled type="text" name="treatment_price"
+                                           value=""></label>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="note" class="form-control-label">Ghi chú</label>
-                                <textarea class="form-control" type="text" name="note" disabled
-                                ></textarea>
+                                <label for="note" class="form-control-label">Ghi chú
+                                    <textarea class="form-control" type="text" name="note" disabled
+                                    ></textarea></label>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="note" class="form-control-label">Trạng thái</label>
-                                <select class="form-control" name="status" disabled
-                                >
-                                    <option value="pending">Đang chờ</option>
-                                    <option value="scheduled">Đã hẹn</option>
-                                    <option value="completed">Đã hoàn thành</option>
-                                    <option value="canceled">Đã hủy</option>
-                                </select>
+                                <label for="note" class="form-control-label">Trạng thái
+                                    <select class="form-control" name="status" disabled
+                                    >
+                                        <option value="pending">Đang chờ</option>
+                                        <option value="scheduled">Đã hẹn</option>
+                                        <option value="completed">Đã hoàn thành</option>
+                                        <option value="canceled">Đã hủy</option>
+                                    </select></label>
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/vi.js'></script>
-{{--    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>--}}
+    {{--    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>--}}
 
     <script>
         const appointmentsData = {!! json_encode($appointments) !!};
@@ -208,8 +208,8 @@
                     let evId = event._id.at(-1);
                     console.log(evId)
                     $.ajax({
-                       url: '/appointment-management/' + evId,
-                       type: 'GET',
+                        url: '/appointment-management/' + evId,
+                        type: 'GET',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -218,7 +218,7 @@
                             let time = appointment.appointment_date.split(' ');
                             time[0] = time[0].split('-').reverse().join('/');
                             let appointment_date = time[1] + ', ngày ' + time[0];
-                            let price = String(appointment.price).replace(/(.)(?=(\d{3})+$)/g,'$1,') + ' VNĐ';
+                            let price = String(appointment.price).replace(/(.)(?=(\d{3})+$)/g, '$1,') + ' VNĐ';
                             console.log(appointment);
                             $('#appointment-information').modal('show');
                             $('#appointment-information input[name="full_name"]').val(appointment.full_name);
