@@ -29,5 +29,9 @@ class PageController extends Controller
         return view("pages.chat");
     }
 
+    public function invoice()
+    {
+        return view("pages.invoice");
+    }
 
 }

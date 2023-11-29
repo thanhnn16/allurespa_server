@@ -38,9 +38,11 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for user management
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
     Route::get('/user-management/{id}', [UserController::class, 'show'])->name('user-management.show');
+    Route::get('/user-management/search', [UserController::class, 'search'])->name('user-management.search');
     Route::get('/user-management-create', [UserController::class, 'create'])->name('user-management.create');
     Route::post('/user-management-create', [UserController::class, 'store'])->name('user-management.store');
     Route::delete('/user-management/{id}', [UserController::class, 'delete'])->name('user-management.delete');
+
     Route::post('/user-management/delete-selected', [UserController::class, 'deleteSelected'])->name('user-management.delete-selected');
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
     Route::get('users/template', [UserController::class, 'template'])->name('users.template');
@@ -81,6 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for home
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('/chat', [PageController::class, 'chat'])->name('chat');
+    Route::get('/invoice', [PageController::class, 'invoice'])->name('invoice');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
 

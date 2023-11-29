@@ -3,7 +3,11 @@
     ]
 )
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"/>
-
+<style>
+    body {
+        overflow-x: hidden !important;
+    }
+</style>
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý lịch hẹn'])
@@ -25,9 +29,33 @@
             </div>
         </div>
     </div>
-    <div class="row d-flex ">
-        <div class="card mb-4 col-11 align-items-center m-auto py-4 px-2">
-            <div id='full_calendar_events' class="w-100"></div>
+    <div id="colorNote">
+        <div class="card mb-4 col-11 align-items-center m-auto py-4">
+            <div class="row w-100 d-flex align-items-center justify-content-center">
+                <div class="col-12 d-flex justify-content-around">
+                    <div class="col-2">
+                        <div class="pending-color d-block h-50 w-50" style="background-color: #fa8d00;"></div>
+                        <p class="text-uppercase text-sm">Đang chờ</p>
+                    </div>
+                    <div class="col-2">
+                        <div class="scheduled-color d-block h-50 w-50" style="background-color: #c57fec;"></div>
+                        <p class="text-uppercase text-sm">Đã hẹn</p>
+                    </div>
+                    <div class="col-2">
+                        <div class="completed-color d-block h-50 w-50" style="background-color: #28a745;"></div>
+                        <p class="text-uppercase text-sm">Đã hoàn thành</p>
+                    </div>
+                    <div class="col-2">
+                        <div class="canceled-color d-block h-50 w-50" style="background-color: #dc3545;"></div>
+                        <p class="text-uppercase text-sm">Đã hủy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-auto">
+        <div class="card mb-4 col-11 py-4 px-1 m-auto">
+            <div id="full_calendar_events" class="m-auto w-95"></div>
         </div>
     </div>
 
@@ -51,14 +79,16 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="email" class="form-control-label">Email
-                                    <input class="form-control disabled" id="email" autocomplete="email" disabled type="email" name="email"
+                                    <input class="form-control disabled" id="email" autocomplete="email" disabled
+                                           type="email" name="email"
                                            value=""></label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="phone_number" class="form-control-label">Số điện thoại
-                                    <input class="form-control disabled" id="phone_number" disabled type="tel" name="phone_number"
+                                    <input class="form-control disabled" id="phone_number" disabled type="tel"
+                                           name="phone_number"
                                            value=""></label>
                             </div>
                         </div>
@@ -107,8 +137,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="edit-button">Sửa</button>
-                    <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá</button>
-                    <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu</button>
+                    <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá
+                    </button>
+                    <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>

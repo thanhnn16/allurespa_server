@@ -47,7 +47,7 @@ class CosmeticController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $cosmetic = Cosmetic::find($id);
 
@@ -56,7 +56,7 @@ class CosmeticController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:191'],

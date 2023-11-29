@@ -186,4 +186,26 @@ class UserController extends Controller
         $file = public_path() . "/templates/import_template.xlsx";
         return response()->download($file, 'import_template.xlsx');
     }
+
+    public function search(Request $request): JsonResponse
+    {
+        info($request);
+
+//        $users = User::where('role', 'users')
+//            ->where(function ($query) use ($request) {
+//                $query->where('full_name', 'like', '%' . $request->get('q', '') . '%')
+//                    ->orWhere('phone_number', 'like', '%' . $request->get('q', '') . '%');
+//            })->get();
+//
+//        if (count($users) === 0) {
+//            return response()->json([
+//                'error' => 'Không tìm thấy người dùng nào'
+//            ]);
+//        }
+        $users = User::all();
+
+        return response()->json([
+            'users' => $users
+        ]);
+    }
 }
