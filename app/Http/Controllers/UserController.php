@@ -191,18 +191,17 @@ class UserController extends Controller
     {
         info($request);
 
-//        $users = User::where('role', 'users')
-//            ->where(function ($query) use ($request) {
-//                $query->where('full_name', 'like', '%' . $request->get('q', '') . '%')
-//                    ->orWhere('phone_number', 'like', '%' . $request->get('q', '') . '%');
-//            })->get();
-//
-//        if (count($users) === 0) {
-//            return response()->json([
-//                'error' => 'Không tìm thấy người dùng nào'
-//            ]);
-//        }
-        $users = User::all();
+        $users = User::where('role', 'users')
+            ->where(function ($query) use ($request) {
+                $query->where('full_name', 'like', '%' . $request->get('q', '') . '%')
+                    ->orWhere('phone_number', 'like', '%' . $request->get('q', '') . '%');
+            })->get();
+
+        if (count($users) === 0) {
+            return response()->json([
+                'error' => 'Không tìm thấy người dùng nào'
+            ]);
+        }
 
         return response()->json([
             'users' => $users

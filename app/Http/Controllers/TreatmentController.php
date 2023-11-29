@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treatment;
+use Illuminate\Contracts\Foundation\Application as ViewApplication;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\Foundation\Application as ViewApplication;
 
 class TreatmentController extends Controller
 {
@@ -55,5 +55,24 @@ class TreatmentController extends Controller
         ]);
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        $treatments = Treatment::query()
+            ->where(function ($query) use ($request) {
+                $query->where('treatment_name', 'like', '%' . $request->get('q', '') . '%');
+            })
+            ->get();
+
+        if (count($treatments) > 0) {
+            return response()->json([
+                'treatments' => $treatments
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Không tìm thấy kết quả'
+            ]);
+        }
+
+    }
 
 }

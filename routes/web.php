@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for user management
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
     Route::get('/user-management/{id}', [UserController::class, 'show'])->name('user-management.show');
-    Route::get('/user-management/search', [UserController::class, 'search'])->name('user-management.search');
+    Route::get('/user-management-search', [UserController::class, 'search'])->name('user-management.search');
     Route::get('/user-management-create', [UserController::class, 'create'])->name('user-management.create');
     Route::post('/user-management-create', [UserController::class, 'store'])->name('user-management.store');
     Route::delete('/user-management/{id}', [UserController::class, 'delete'])->name('user-management.delete');
@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for treatment management
     Route::get('/treatment-management', [TreatmentController::class, 'index'])->name('treatment-management');
     Route::get('/treatment-management/{id}', [TreatmentController::class, 'show'])->name('treatment-management.show');
+    Route::get('/treatment-management-search', [TreatmentController::class, 'search'])->name('treatment-management.search');
     Route::get('/treatment-management-create', [TreatmentController::class, 'create'])->name('treatment-management.create');
     Route::post('/treatment-management-create', [TreatmentController::class, 'store'])->name('treatment-management.store');
     Route::delete('/treatment-management/{id}', [TreatmentController::class, 'delete'])->name('treatment-management.delete');
@@ -66,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/cosmetic-management', [CosmeticController::class, 'index'])->name('cosmetic-management');
     Route::get('/cosmetic-management/{id}', [CosmeticController::class, 'show'])->name('cosmetic-management.show');
     Route::get('/cosmetic-management-create', [CosmeticController::class, 'create'])->name('cosmetic-management.create');
+    Route::get('/cosmetic-management-search', [CosmeticController::class, 'search'])->name('cosmetic-management.search');
     Route::post('/cosmetic-management-create', [CosmeticController::class, 'store'])->name('cosmetic-management.store');
     Route::delete('/cosmetic-management/{id}', [CosmeticController::class, 'delete'])->name('cosmetic-management.delete');
     Route::post('/cosmetic-management/delete-selected', [CosmeticController::class, 'deleteSelected'])->name('cosmetic-management.delete-selected');
@@ -80,10 +82,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/appointment-management-create', [AppointmentController::class, 'create'])->name('appointment-management.create');
     Route::post('/appointment-management', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.store');
 
+//    route for invoice
+    Route::get('/invoice', [PageController::class, 'invoice'])->name('invoice');
+    Route::post('/invoice', [PageController::class, 'crate'])->name('invoice.create');
+
 //    route for home
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('/chat', [PageController::class, 'chat'])->name('chat');
-    Route::get('/invoice', [PageController::class, 'invoice'])->name('invoice');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
 

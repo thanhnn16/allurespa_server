@@ -151,20 +151,21 @@ CREATE TABLE news
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE comments
-(
-    id           INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    user_id      INT                            NOT NULL,
-    cosmetics_id INT,
-    treatment_id INT,
-    text         TEXT                           NOT NULL,
-    image        VARCHAR(255),
-    created_at   DATETIME                       NOT NULL,
-    updated_at   DATETIME                       NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (cosmetics_id) REFERENCES cosmetics (id),
-    FOREIGN KEY (treatment_id) REFERENCES treatments (id)
-);
+#
+# CREATE TABLE comments
+# (
+#     id           INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+#     user_id      INT                            NOT NULL,
+#     cosmetics_id INT,
+#     treatment_id INT,
+#     text         TEXT                           NOT NULL,
+#     image        VARCHAR(255),
+#     created_at   DATETIME                       NOT NULL,
+#     updated_at   DATETIME                       NOT NULL,
+#     FOREIGN KEY (user_id) REFERENCES users (id),
+#     FOREIGN KEY (cosmetics_id) REFERENCES cosmetics (id),
+#     FOREIGN KEY (treatment_id) REFERENCES treatments (id)
+# );
 
 CREATE TABLE ratings
 (
@@ -172,6 +173,8 @@ CREATE TABLE ratings
     user_id      INT                            NOT NULL,
     cosmetics_id INT,
     treatment_id INT,
+    text         TEXT                           NOT NULL,
+    image        VARCHAR(255),
     stars        INT                            NOT NULL CHECK (stars >= 1 AND stars <= 5),
     created_at   DATETIME                       NOT NULL,
     updated_at   DATETIME                       NOT NULL,

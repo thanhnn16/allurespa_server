@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cosmetic;
-use App\Models\Treatment;
 use Illuminate\Contracts\Foundation\Application as ViewApplication;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -80,5 +79,24 @@ class CosmeticController extends Controller
         return response()->json([
             'cosmetic' => $cosmetic
         ]);
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $cosmetics = Cosmetic::query()
+            ->where(function ($query) use ($request) {
+                $query->where('cosmetic_name', 'like', '%' . $request->get('q', '') . '%');
+            })
+            ->get();
+
+        if (count($cosmetics) > 0) {
+            return response()->json([
+                'cosmetics' => $cosmetics
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Không tìm thấy kết quả'
+            ]);
+        }
     }
 }
