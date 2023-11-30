@@ -3,11 +3,6 @@
     ]
 )
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"/>
-<style>
-    body {
-        overflow-x: hidden !important;
-    }
-</style>
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý lịch hẹn'])
@@ -62,87 +57,209 @@
     <div class="modal fade" tabindex="-1" id="appointment-information">
         <div class="modal-dialog modal-lg modal-dialog-scrollable ms-auto">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Thông tin lịch hẹn</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-uppercase text-sm">THÔNG TIN CHI TIẾT</p>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Họ và tên khách hàng
-                                    <input class="form-control" disabled type="text" name="full_name"
-                                           value=""></label>
+                <form id="edit-appointment-form" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông tin lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-uppercase text-sm">THÔNG TIN CHI TIẾT</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="edt-full_name" class="form-control-label w-100">Họ và tên khách hàng
+                                        <input class="form-control" id="edt-full_name" disabled type="text"
+                                               name="full_name"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email" class="form-control-label">Email
-                                    <input class="form-control disabled" id="email" autocomplete="email" disabled
-                                           type="email" name="email"
-                                           value=""></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="edt-email" class="form-control-label w-100">Email
+                                        <input class="form-control disabled" id="edt-email" autocomplete="email"
+                                               disabled
+                                               type="email" name="email"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone_number" class="form-control-label">Số điện thoại
-                                    <input class="form-control disabled" id="phone_number" disabled type="tel"
-                                           name="phone_number"
-                                           value=""></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="edt-phone_number" class="form-control-label w-100">Số điện thoại
+                                        <input class="form-control disabled" id="edt-phone_number" disabled type="tel"
+                                               name="phone_number"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Tên liệu trình
-                                    <input class="form-control" disabled type="text" name="treatment_name"
-                                           value=""></label>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="edt-treatment_name" class="form-control-label w-100">Tên liệu trình
+                                        <input class="form-control" disabled type="text" id="edt-treatment_name"
+                                               name="treatment_name"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="appointment_date" class="form-control-label">Thời gian
-                                    <input class="form-control" disabled type="text" name="appointment_date"
-                                           value=""></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="edt-appointment_date" class="form-control-label w-100">Thời gian
+                                        <input class="form-control" disabled id="edt-appointment_date" type="text"
+                                               name="appointment_date"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="treatment_price" class="form-control-label">Giá
-                                    <input class="form-control" disabled type="text" name="treatment_price"
-                                           value=""></label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="edt-treatment_price" class="form-control-label w-100">Giá
+                                        <input class="form-control" id="edt-treatment_price" disabled type="text"
+                                               name="treatment_price"
+                                               value=""></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="note" class="form-control-label">Ghi chú
-                                    <textarea class="form-control" type="text" name="note" disabled
-                                    ></textarea></label>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="edt-note" class="form-control-label w-100">Ghi chú
+                                        <textarea class="form-control" id="edt-note" type="text" name="note" disabled
+                                        ></textarea></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="note" class="form-control-label">Trạng thái
-                                    <select class="form-control" name="status" disabled
-                                    >
-                                        <option value="pending">Đang chờ</option>
-                                        <option value="scheduled">Đã hẹn</option>
-                                        <option value="completed">Đã hoàn thành</option>
-                                        <option value="canceled">Đã hủy</option>
-                                    </select></label>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="edt-status" class="form-control-label w-100">Trạng thái
+                                        <select class="form-control" id="edt-status" name="status" disabled
+                                        >
+                                            <option value="pending">Đang chờ</option>
+                                            <option value="scheduled">Đã hẹn</option>
+                                            <option value="completed">Đã hoàn thành</option>
+                                            <option value="canceled">Đã hủy</option>
+                                        </select></label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="edit-button">Sửa</button>
-                    <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá
-                    </button>
-                    <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="edit-button">Sửa</button>
+                        <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá
+                        </button>
+                        <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="appointment-create">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable ms-auto">
+            <div class="modal-content">
+                <form id="appointment-create-form" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông tin lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-uppercase text-sm">THÔNG TIN CHI TIẾT</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="full_name" class="form-control-label w-100">Tìm khách hàng
+                                        <input class="form-control" id="full_name" type="text" name="full_name"
+                                               value="">
+                                        <ul class="list-group list-group-flush" id="full_name_list"
+                                            style="display: none;">
+                                        </ul>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email" class="form-control-label w-100">Email
+                                        <input class="form-control disabled" id="email" autocomplete="email" disabled
+                                               type="email" name="email"
+                                               value=""></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone_number" class="form-control-label w-100">Số điện thoại
+                                        <input class="form-control disabled" id="phone_number" disabled type="tel"
+                                               name="phone_number"
+                                               value=""></label>
+                                </div>
+                            </div>
+                            <p class="text-uppercase text-sm">Đặt lịch để</p>
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="muc_dich" id="tu-van">
+                                    <label class="form-check-label" for="tu-van">
+                                        Tư vấn
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="muc_dich" id="for_treatment" checked>
+                                    <label class="form-check-label" for="for_treatment">
+                                        Làm liệu trình
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="treatment_name" class="form-control-label w-100">Chọn liệu trình
+                                        <input class="form-control" id="treatment_name" type="text"
+                                               name="treatment_name"
+                                               value="">
+                                        <ul class="list-group list-group-flush" id="treatment_name_list"
+                                            style="display: none;">
+                                        </ul>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="appointment_date" class="form-control-label w-100">Chọn thời gian
+                                        <input class="form-control" id="appointment_date" type="datetime-local"
+                                               name="appointment_date"
+                                               value=""></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="treatment_price" class="form-control-label w-100">Giá tạm tính
+                                        <input class="form-control" id="treatment_price" disabled type="text"
+                                               name="treatment_price"
+                                               value=""></label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="note" class="form-control-label w-100">Ghi chú
+                                        <textarea class="form-control" id="note" type="text" name="note"
+                                        ></textarea></label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="note" class="form-control-label w-100">Trạng thái
+                                        <select class="form-control" name="status"
+                                        >
+                                            <option value="pending">Chờ xác nhận</option>
+                                            <option value="scheduled">Đã hẹn</option>
+                                            <option value="completed">Đã hoàn thành</option>
+                                            <option value="canceled">Đã hủy</option>
+                                        </select></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="reset" class="btn btn-danger">Reset
+                        </button>
+                        <button type="submit" class="btn btn-success" id="create-button">Thêm
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -150,6 +267,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/vi.js'></script>
+
     {{--    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>--}}
 
     <script>
@@ -194,31 +312,12 @@
                 },
                 selectable: true,
                 selectHelper: true,
-                select: function (event_start, allDay) {
-                    const event_name = prompt('Lịch mới:');
-                    if (event_name) {
-                        const event_start = $.fullCalendar.formatDate(event_start, "DD-MM-Y HH:mm:ss");
-                        $.ajax({
-                            url: "/appointments",
-                            data: {
-                                event_name: event_name,
-                                event_start: event_start,
-                                type: 'create'
-                            },
-                            type: "POST",
-                            success: function (data) {
-                                displayMessage("Event created.");
-                                calendar.fullCalendar('renderEvent', {
-                                    id: data.id,
-                                    title: event_name,
-                                    start: event_start,
-                                    end: event_end,
-                                    allDay: allDay
-                                }, true);
-                                calendar.fullCalendar('unselect');
-                            }
-                        });
-                    }
+                select: function (event_start, event_end, allDay) {
+                    $('#appointment-create').modal('show');
+                    console.log((event_start).format('YYYY-MM-DD HH:mm'))
+                    console.log((event_end).format('YYYY-MM-DD HH:mm'))
+                    $('#appointment-create input[name="appointment_date"]').val((event_start).format('YYYY-MM-DD HH:mm'));
+
                 },
                 eventDrop: function (event, delta) {
                     const event_start = $.fullCalendar.formatDate(event.start, "DD-MM-Y");
