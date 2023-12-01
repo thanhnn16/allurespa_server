@@ -18,11 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('treatments', [TreatmentController::class, 'index']);
-Route::get('treatments/{id}', [TreatmentController::class, 'show']);
+Route::get('treatments', [TreatmentController::class, 'index'])->middleware('json.response');
+Route::get('treatments/{id}', [TreatmentController::class, 'show'])->middleware('json.response');
 
-Route::get('cosmetics', [CosmeticController::class, 'index']);
-Route::get('cosmetics/{id}', [CosmeticController::class, 'show']);
+Route::get('cosmetics', [CosmeticController::class, 'index'])->middleware('json.response');
+Route::get('cosmetics/{id}', [CosmeticController::class, 'show'])->middleware('json.response');
 
 Route::post('/login-get-token', [LoginController::class, 'loginGetToken'])->middleware('api')->name('login.get.token');
 
@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         return $request->user();
     });
 
-    Route::get('appointments', [AppointmentController::class, 'index']);
-    Route::get('appointments/{id}', [AppointmentController::class, 'show']);
+    Route::get('appointments', [AppointmentController::class, 'index'])->middleware('json.response');
+    Route::get('appointments/{id}', [AppointmentController::class, 'show'])->middleware('json.response');
     Route::post('appointments', [AppointmentController::class, 'store']);
 });

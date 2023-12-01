@@ -1,10 +1,8 @@
 # Create database
-
 create database allure_dev;
 use allure_dev;
 #
 # Create tables
-
 CREATE TABLE treatment_categories
 (
     id                      INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -307,3 +305,7 @@ VALUES ('Tinh chất LIPOCOLLAGE LAMELLAR', 1,
         1999000, 'Kem dạng gel chống thô ráp và mất nước cho da. Giúp da mịn màng, căng tràn sức sống.',
         'MEADOWSWEET. ACETYL HYDROXYPROLINE. MAGNESIUM ASCORBYL PHOSPHATE. CYCLIC LYSOPHOSPHATIDIC ACID. CENTELLA ASIATICA LEAF EXTRACT. CAPROOYL TETRAPEPTIDE-3. ACETYL DECAPEPTIDE-3.',
         'Sau khi thoa kem dưỡng, thoa một lượng nhỏ gel bằng cách ấn nhẹ vào da khắp mặt và vỗ nhẹ.', '', NOW(), NOW());
+
+SELECT @@global.time_zone, @@session.time_zone;
+
+

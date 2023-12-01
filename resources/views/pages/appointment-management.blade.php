@@ -57,95 +57,117 @@
     <div class="modal fade" tabindex="-1" id="appointment-information">
         <div class="modal-dialog modal-lg modal-dialog-scrollable ms-auto">
             <div class="modal-content">
-                <form id="edit-appointment-form" method="post">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Thông tin lịch hẹn</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="text-uppercase text-sm">THÔNG TIN CHI TIẾT</p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="edt-full_name" class="form-control-label w-100">Họ và tên khách hàng
-                                        <input class="form-control" id="edt-full_name" disabled type="text"
-                                               name="full_name"
-                                               value=""></label>
-                                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông tin lịch hẹn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-uppercase text-sm">THÔNG TIN CHI TIẾT</p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edt-full_name" class="form-control-label w-100">Họ và tên khách hàng
+                                    <input class="form-control" id="edt-full_name" disabled type="text"
+                                           name="full_name"
+                                           value=""></label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="edt-email" class="form-control-label w-100">Email
-                                        <input class="form-control disabled" id="edt-email" autocomplete="email"
-                                               disabled
-                                               type="email" name="email"
-                                               value=""></label>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edt-email" class="form-control-label w-100">Email
+                                    <input class="form-control disabled" id="edt-email" autocomplete="email"
+                                           disabled
+                                           type="email" name="email"
+                                           value=""></label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="edt-phone_number" class="form-control-label w-100">Số điện thoại
-                                        <input class="form-control disabled" id="edt-phone_number" disabled type="tel"
-                                               name="phone_number"
-                                               value=""></label>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edt-phone_number" class="form-control-label w-100">Số điện thoại
+                                    <input class="form-control disabled" id="edt-phone_number" disabled type="tel"
+                                           name="phone_number"
+                                           value=""></label>
                             </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="edt-treatment_name" class="form-control-label w-100">Tên liệu trình
-                                        <input class="form-control" disabled type="text" id="edt-treatment_name"
-                                               name="treatment_name"
-                                               value=""></label>
-                                </div>
+                        </div>
+                        <p class="text-uppercase text-sm">Đặt lịch để</p>
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input class="form-check-input" disabled type="radio" name="edt-muc_dich"
+                                       id="edt-tu-van">
+                                <label class="form-check-label" for="edt-tu-van">
+                                    Tư vấn
+                                </label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="edt-appointment_date" class="form-control-label w-100">Thời gian
-                                        <input class="form-control" disabled id="edt-appointment_date" type="text"
-                                               name="appointment_date"
-                                               value=""></label>
-                                </div>
+                            <div class="form-check">
+                                <input class="form-check-input" disabled type="radio" name="edt-muc_dich"
+                                       id="edt-for_treatment"
+                                       checked>
+                                <label class="form-check-label" for="edt-for_treatment">
+                                    Làm liệu trình
+                                </label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="edt-treatment_price" class="form-control-label w-100">Giá
-                                        <input class="form-control" id="edt-treatment_price" disabled type="text"
-                                               name="treatment_price"
-                                               value=""></label>
-                                </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edt-treatment_name" class="form-control-label w-100">Tên liệu trình
+                                    <input class="form-control" disabled type="text" id="edt-treatment_name"
+                                           name="treatment_name"
+                                           value=""></label>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="edt-note" class="form-control-label w-100">Ghi chú
-                                        <textarea class="form-control" id="edt-note" type="text" name="note" disabled
-                                        ></textarea></label>
-                                </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="edt-start_date" class="form-control-label w-100">Bắt đầu
+                                    <input class="form-control" id="edt-start_date" type="datetime-local"
+                                           name="edt-start_date" disabled
+                                           value=""></label>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="edt-status" class="form-control-label w-100">Trạng thái
-                                        <select class="form-control" id="edt-status" name="status" disabled
-                                        >
-                                            <option value="pending">Đang chờ</option>
-                                            <option value="scheduled">Đã hẹn</option>
-                                            <option value="completed">Đã hoàn thành</option>
-                                            <option value="canceled">Đã hủy</option>
-                                        </select></label>
-                                </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="edt-end_date" class="form-control-label w-100">Kết thúc
+                                    <input class="form-control" id="edt-end_date" type="datetime-local"
+                                           name="edt-end_date" disabled
+                                           value=""></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="edt-treatment_price" class="form-control-label w-100">Giá tạm tính
+                                    <input class="form-control" id="edt-treatment_price" disabled type="text"
+                                           name="edt-treatment_price"
+                                           value=""></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edt-note" class="form-control-label w-100">Ghi chú
+                                    <textarea class="form-control" id="edt-note" type="text" name="note" disabled
+                                    ></textarea></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edt-status" class="form-control-label w-100">Trạng thái
+                                    <select class="form-control" id="edt-status" name="status" disabled
+                                    >
+                                        <option value="pending">Đang chờ</option>
+                                        <option value="scheduled">Đã hẹn</option>
+                                        <option value="completed">Đã hoàn thành</option>
+                                        <option value="cancelled">Đã hủy</option>
+                                    </select></label>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="edit-button">Sửa</button>
-                        <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá
-                        </button>
-                        <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="edit-button">Sửa</button>
+                    <button type="button" class="btn btn-danger" id="delete-button" style="display:none;">Xoá
+                    </button>
+                    <button type="button" class="btn btn-success" id="save-button" style="display:none;">Lưu
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
@@ -215,7 +237,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="start_date" class="form-control-label w-100">Bắt đầu
                                     <input class="form-control" id="start_date" type="datetime-local"
@@ -223,7 +245,7 @@
                                            value=""></label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="end_date" class="form-control-label w-100">Kết thúc
                                     <input class="form-control" id="end_date" type="datetime-local"
@@ -231,7 +253,7 @@
                                            value=""></label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="treatment_price" class="form-control-label w-100">Giá tạm tính
                                     <input class="form-control" id="treatment_price" disabled type="text"
@@ -254,7 +276,7 @@
                                         <option value="pending">Chờ xác nhận</option>
                                         <option value="scheduled">Đã hẹn</option>
                                         <option value="completed">Đã hoàn thành</option>
-                                        <option value="canceled">Đã hủy</option>
+                                        <option value="cancelled">Đã hủy</option>
                                     </select></label>
                             </div>
                         </div>
@@ -279,13 +301,15 @@
 
     <script>
         const appointmentsData = {!! json_encode($appointments) !!};
+        console.log(appointmentsData)
         let events = [];
         appointmentsData.forEach(function (appointment) {
-            console.log(appointment)
             events.push({
-                title: appointment.full_name,
+                id: appointment.id,
+                title: appointment.full_name === null ? 'N/A' : appointment.full_name,
                 start: appointment.start_date,
                 end: appointment.end_date,
+                is_consultation: appointment.is_consultation,
                 color: appointment.status === 'completed' ? '#28a745' :
                     appointment.status === 'pending' ? '#fa8d00' :
                         appointment.status === 'scheduled' ? '#c57fec' :
@@ -295,6 +319,7 @@
 
             });
         });
+        console.log(events);
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -304,24 +329,23 @@
             let calendar = $('#full_calendar_events').fullCalendar({
                 editable: true,
                 events: events,
-                timezone: 'Asia/Ho_Chi_Minh',
                 displayEventTime: true,
                 displayEventEnd: true,
                 firstDay: 1,
                 defaultView: 'agendaWeek',
                 locale: 'vi',
+                minTime: '08:00:00',
+                maxTime: '20:00:00',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'agendaDay,agendaWeek,month,listWeek'
                 },
-                eventRender: function (event) {
+                eventRender: function (event, element) {
                     event.allDay = event.allDay === 'true';
-                    event.completed = event.completed === 'true';
-                    event.comment = event.comment === 'null' ? '' : event.comment;
-                    event.title = event.title === 'null' ? '' : event.title;
-                    event.start = event.start === 'null' ? '' : event.start;
-                    event.end = event.end === 'null' ? '' : event.end;
+                    element.find('.fc-title').append("<br/>" + event.comment);
+                    element.attr('title', event.is_consultation === 1 ? 'Tư vấn' : 'Liệu trình');
+
                 },
                 selectable: true,
                 selectHelper: true,
@@ -339,7 +363,6 @@
                             let end_date = $('#appointment-create input[name="end_date"]').val();
                             if (end_date < start_date) {
                                 alert('Thời gian kết thúc phải lớn hơn thời gian bắt đầu');
-                                end_date = start_date;
                                 return false;
                             } else if (!end_date) {
                                 alert('Vui lòng chọn thời gian kết thúc');
@@ -372,7 +395,7 @@
 
                                         let customers = response.users;
                                         customers.forEach(function (customer) {
-                                            html += '<li class="list-group-item cursor-pointer list-group-item-action w-100" data-id=" ' + customer.id + ' " data-email="' + customer.email + '" data-phone_number="' + customer.phone_number + '">' + customer.full_name + '</li>';
+                                            html += '<li class="list-group-item cursor-pointer list-group-item-action w-100" data-id=" ' + customer.id + ' " data-email="' + customer.email + '" data-phone_number="' + customer.phone_number + '">' + customer.full_name + ' - ' + customer.phone_number + '</li>';
                                         });
                                         $('#full_name_list').html(html);
                                         $('#full_name_list').show();
@@ -462,10 +485,11 @@
                     $('#create-button').click(function () {
                         let full_name = $('#appointment-create input[name="full_name"]').val();
                         let phone_number = $('#appointment-create input[name="phone_number"]').val();
-                        let start_date = new Date($('#appointment-create input[name="start_date"]').val()).toISOString();
-                        let end_date = new Date($('#appointment-create input[name="end_date"]').val()).toISOString();
+                        let start_date = moment($('#appointment-create input[name="start_date"]').val()).format('YYYY-MM-DD HH:mm');
+                        let end_date = moment($('#appointment-create input[name="end_date"]').val()).format('YYYY-MM-DD HH:mm');
                         let note = $('#appointment-create textarea[name="note"]').val();
                         let status = $('#appointment-create select[name="status"]').val();
+                        console.log(start_date, end_date);
                         if (!full_name) {
                             alert('Vui lòng nhập họ và tên');
                             return false;
@@ -511,13 +535,12 @@
                                     return;
                                 }
                                 $('#appointment-create').modal('hide');
-                                $('#full_calendar_events').fullCalendar('refetchEvents');
                                 $('#reset-button').click();
+                                // location.reload();
                             }
                         });
                     });
                 },
-
                 eventDrop: function (event, delta) {
                     const event_start = $.fullCalendar.formatDate(event.start, "DD-MM-Y");
                     $.ajax({
@@ -534,34 +557,32 @@
                     });
                 },
                 eventClick: function (event) {
-                    console.log(event)
-                    let evId = event._id.at(-1);
-                    console.log(evId)
                     $.ajax({
-                        url: '/appointment-management/' + evId,
+                        url: '/appointment-management/' + event.id,
                         type: 'GET',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (response) {
                             let appointment = response.appointment;
-                            let time = appointment.appointment_date.split(' ');
-                            time[0] = time[0].split('-').reverse().join('/');
-                            let appointment_date = time[1] + ', ngày ' + time[0];
-                            let price = String(appointment.price).replace(/(.)(?=(\d{3})+$)/g, '$1,') + ' VNĐ';
+                            let start_date = new Date(appointment.start_date).toISOString().slice(0, 16);
+                            let end_date = new Date(appointment.end_date).toISOString().slice(0, 16);
+
+                            let price = appointment.price === null ? '0' : String(appointment.price).replace(/(.)(?=(\d{3})+$)/g, '$1,') + ' VNĐ';
                             $('#appointment-information').modal('show');
-                            $('#appointment-information input[name="edt-full_name"]').val(appointment.full_name);
-                            $('#appointment-information input[name="edt-email"]').val(appointment.email);
-                            $('#appointment-information input[name="edt-phone_number"]').val(appointment.phone_number);
-                            $('#appointment-information input[name="edt-treatment_name"]').val(appointment.treatment_name);
-                            $('#appointment-information input[name="edt-appointment_date"]').val(appointment_date);
-                            $('#appointment-information input[name="edt-treatment_price"]').val(price);
-                            $('#appointment-information textarea[name="edt-note"]').val(appointment.note);
-                            $('#appointment-information select[name="edt-status"]').val(appointment.status);
+                            $('#edt-full_name').val(appointment.full_name === null ? 'N/A' : appointment.full_name);
+                            $('#edt-email').val(appointment.email === null ? 'N/A' : appointment.email);
+                            $('#edt-phone_number').val(appointment.phone_number);
+                            $('#edt-treatment_name').val(appointment.treatment_name);
+                            $('#edt-start_date').val(start_date);
+                            $('#edt-end_date').val(end_date);
+                            $('#edt-treatment_price').val(price);
+                            $('#edt-tu-van').prop('checked', appointment.is_consultation === 1);
+                            $('#edt-for_treatment').prop('checked', appointment.is_consultation === 0);
+                            $('#edt-note').val(appointment.note);
+                            $('#edt-status').val(appointment.status);
 
                             $('#edit-button').click(function () {
-                                $('#appointment-information input[name="appointment_date"]').attr('type', 'datetime-local');
-                                $('#appointment-information input[name="appointment_date"]').removeAttr('disabled');
                                 $('#appointment-information textarea[name="note"]').removeAttr('disabled');
                                 $('#appointment-information select[name="status"]').removeAttr('disabled');
                                 $('#edit-button').hide();

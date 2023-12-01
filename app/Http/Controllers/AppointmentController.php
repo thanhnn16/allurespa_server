@@ -17,15 +17,16 @@ class AppointmentController extends Controller
             $start = $request->get('start', '');
             $end = $request->get('end', '');
             $appointments = Appointment::query()
-                ->whereBetween('appointment_date', [$start, $end])
+                ->whereDate('start_date', '>=', $start)
+                ->whereDate('end_date', '<=', $end)
                 ->join('users', 'users.id', '=', 'appointments.user_id')
-                ->join('treatments', 'treatments.id', '=', 'appointments.treatment_id')
+                ->leftJoin('treatments', 'treatments.id', '=', 'appointments.treatment_id')
                 ->select('appointments.*', 'users.full_name', 'treatments.treatment_name')
                 ->get();
         } else {
             $appointments = Appointment::query()
                 ->join('users', 'users.id', '=', 'appointments.user_id')
-                ->join('treatments', 'treatments.id', '=', 'appointments.treatment_id')
+                ->leftJoin('treatments', 'treatments.id', '=', 'appointments.treatment_id')
                 ->select('appointments.*', 'users.full_name', 'treatments.treatment_name')
                 ->get();
         }
@@ -34,7 +35,6 @@ class AppointmentController extends Controller
             return response()->json(['appointments' => $appointments]);
         }
         return view('pages.appointment-management', ['appointments' => $appointments]);
-
     }
 
     public function calendarEvents(Request $request)
@@ -51,8 +51,13 @@ class AppointmentController extends Controller
                     'note' => $request->note,
                     'status' => $request->status,
                 ]);
-
-                return response()->json($event);
+                if ($event) {
+                    return response()->json([
+                        'success' => 'Thêm lịch thành công',
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Có lỗi trong quá trình tạo.']);
+                }
 
             case 'edit':
                 $event = Appointment::find($request->id)->update([
@@ -79,7 +84,10 @@ class AppointmentController extends Controller
         $request->validate([
             'user_id' => 'required',
             'treatment_id' => 'required',
-            'appointment_date' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'is_consultation' => 'required',
+            'is_all_day' => 'required',
             'note' => 'nullable',
         ]);
 
@@ -96,9 +104,10 @@ class AppointmentController extends Controller
         $appointment = Appointment::query()
             ->where('appointments.id', $id)
             ->join('users', 'users.id', '=', 'appointments.user_id')
-            ->join('treatments', 'treatments.id', '=', 'appointments.treatment_id')
+            ->leftJoin('treatments', 'treatments.id', '=', 'appointments.treatment_id')
             ->select('appointments.*', 'users.full_name', 'users.phone_number', 'treatments.treatment_name', 'treatments.price')
             ->first();
+
         return response()->json([
             'appointment' => $appointment,
         ]);

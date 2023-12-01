@@ -25,9 +25,9 @@ class TreatmentController extends Controller
 
         if ($request->wantsJson()) {
             return response()->json(['treatments' => Treatment::all()]);
+        } else {
+            return view('pages.treatment-management', ['treatments' => $treatments]);
         }
-
-        return view('pages.treatment-management', ['treatments' => $treatments]);
     }
 
     public function store(Request $request): JsonResponse
