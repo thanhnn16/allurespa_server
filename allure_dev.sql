@@ -113,6 +113,7 @@ CREATE TABLE invoice_details
     id                 INT PRIMARY KEY AUTO_INCREMENT                           NOT NULL,
     invoice_id         INT                                                      NOT NULL,
     treatment_id       INT                                                      NOT NULL,
+    is_cash            TINYINT(1)                                               NOT NULL DEFAULT 0,
     cosmetic_id        INT                                                      NOT NULL,
     treatment_quantity INT                                                      NOT NULL,
     cosmetic_quantity  INT                                                      NOT NULL,
@@ -139,33 +140,6 @@ CREATE TABLE shopping_cart
     FOREIGN KEY (treatment_id) REFERENCES treatments (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
-CREATE TABLE news
-(
-    id         INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    user_id    INT                            NOT NULL,
-    image      VARCHAR(255),
-    content    TEXT,
-    created_at DATETIME                       NOT NULL,
-    updated_at DATETIME                       NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
-#
-# CREATE TABLE comments
-# (
-#     id           INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-#     user_id      INT                            NOT NULL,
-#     cosmetics_id INT,
-#     treatment_id INT,
-#     text         TEXT                           NOT NULL,
-#     image        VARCHAR(255),
-#     created_at   DATETIME                       NOT NULL,
-#     updated_at   DATETIME                       NOT NULL,
-#     FOREIGN KEY (user_id) REFERENCES users (id),
-#     FOREIGN KEY (cosmetics_id) REFERENCES cosmetics (id),
-#     FOREIGN KEY (treatment_id) REFERENCES treatments (id)
-# );
 
 CREATE TABLE ratings
 (
@@ -195,6 +169,7 @@ CREATE TABLE favorites
     FOREIGN KEY (treatment_id) REFERENCES treatments (id),
     FOREIGN KEY (cosmetics_id) REFERENCES cosmetics (id)
 );
+
 CREATE TABLE notifications
 (
     id         INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -206,6 +181,7 @@ CREATE TABLE notifications
     updated_at DATETIME                       NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
 CREATE TABLE chats
 (
     id          INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -222,14 +198,17 @@ CREATE TABLE chats
 
 CREATE TABLE appointments
 (
-    id               INT PRIMARY KEY AUTO_INCREMENT                          NOT NULL,
-    user_id          INT                                                     NOT NULL,
-    treatment_id     INT                                                     NOT NULL,
-    appointment_date DATETIME                                                NOT NULL,
-    status           ENUM ('pending', 'scheduled', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
-    note             TEXT,
-    created_at       DATETIME                                                NOT NULL,
-    updated_at       DATETIME                                                NOT NULL,
+    id              INT PRIMARY KEY AUTO_INCREMENT                          NOT NULL,
+    user_id         INT                                                     NOT NULL,
+    treatment_id    INT                                                     NULL,
+    start_date      DATETIME                                                NOT NULL,
+    end_date        DATETIME                                                NOT NULL,
+    is_consultation TINYINT(1)                                              NOT NULL DEFAULT 0,
+    is_all_day      TINYINT(1)                                              NOT NULL DEFAULT 0,
+    status          ENUM ('pending', 'scheduled', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
+    note            TEXT,
+    created_at      DATETIME                                                NOT NULL,
+    updated_at      DATETIME                                                NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (treatment_id) REFERENCES treatments (id)
 );
