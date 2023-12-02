@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 
@@ -20,7 +24,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\View\View
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
     public function index()
     {
@@ -38,25 +42,27 @@ class HomeController extends Controller
             if ($request->header('X-GitHub-Event') == 'pull_request') {
                 $payload = $request->all();
                 if ($payload['action'] == 'closed') {
-                    $branch = $payload['pull_request']['head']['ref'];
-                    $repo = $payload['pull_request']['head']['repo']['name'];
-                    $owner = $payload['pull_request']['head']['repo']['owner']['login'];
-                    $url = $payload['pull_request']['head']['repo']['clone_url'];
-                    $commit = $payload['pull_request']['head']['sha'];
-                    $this->gitPull($branch, $repo, $owner, $url, $commit);
+                    try {
+                        $this->gitPull();
+                    } catch (Exception $e) {
+                        return response()->json(['error' => $e->getMessage()]);
+                    }
                 }
             }
         }
         return response()->json(['success' => 'Webhook received']);
     }
 
-    private function gitPull(mixed $branch, mixed $repo, mixed $owner, mixed $url, mixed $commit)
+    /**
+     * @throws Exception
+     */
+    private function gitPull()
     {
         $process = new Process(['cd /var/www/allurespa_server && git pull']);
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new \Exception('Git pull failed: ' . $process->getErrorOutput());
+            throw new Exception('Git pull failed: ' . $process->getErrorOutput());
         }
 
         echo $process->getOutput();
