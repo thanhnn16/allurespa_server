@@ -166,7 +166,7 @@ class UserController extends Controller
             }
             if ($user->image != '/img/marie.jpg' || $user->image === '') {
                 $imageController = new ImageController;
-                if (!$imageController->deleteImage($user->image)) {
+                if (!$imageController->deleteUserAvatar($user->image)) {
                     $errors[] = 'Không thể xóa ảnh của người dùng ' . $user->full_name;
                     continue;
                 }

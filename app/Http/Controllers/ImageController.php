@@ -26,7 +26,7 @@ class ImageController extends Controller
         return $imagePath;
     }
 
-    public function deleteImage($imageName): bool
+    public function deleteUserAvatar($imageName): bool
     {
         $imagePath = public_path('uploads/img/users/avatar/' . $imageName);
         if (file_exists($imagePath)) {
