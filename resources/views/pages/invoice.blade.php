@@ -299,13 +299,13 @@
                                             <input type="hidden" name="encodeKey"
                                                    value="rf8whwaejNhJiQG2bsFubSzccfRc/iRYyGUn6SPmT6y/L7A2XABbu9y4GvCoSTOTpvJykFi6b1G0crU8et2O0Q==">
                                             <input type="hidden" name="currency" value="VND">
-                                            <input type="hidden" name="amount" value="">
+                                            <input type="hidden" name="amount" data-amount="" value="">
                                             <input type="hidden" name="invoiceNo" value="">
                                             <input type="hidden" name="goodsNm" value="">
                                             <input type="hidden" name="callBackUrl"
-                                                   value="http://127.0.0.1:8000/invoice-detail">
+                                                   value="http://127.0.0.1:8000/invoice">
                                             <input type="hidden" name="notiUrl"
-                                                   value="http://127.0.0.1:8000/invoice-detail">
+                                                   value="http://127.0.0.1:8000/invoice">
                                             <input type="hidden" name="reqDomain" value="http://localhost:8000">
                                             <input type="hidden" name="description" value="Thanh toan cho Allure Spa">
                                             <input type="hidden" name="merchantToken" value="">
@@ -661,7 +661,6 @@
                 $('#megapayForm').find('input[name="merTrxId"]').val(`${merId + timeStamp + Math.floor(Math.random() * 1000000)}`);
                 let merTrxId = $('#megapayForm').find('input[name="merTrxId"]').val();
 
-                // goodsNm
                 let goodsNm = '';
                 treatmentsList.forEach(treatment => {
                     goodsNm += `${treatment.name} x ${treatment.quantity}, `;
@@ -672,7 +671,7 @@
 
                 $('#megapayForm').find('input[name="goodsNm"]').val(goodsNm);
 
-                $('#megapayForm').find('input[name="invoiceNo"]').val(merTrxId);
+                $('#megapayForm').find('input[name="invoiceNo"]').val("ORD_" + timeStamp);
 
                 $('#megapayForm').find('input[name="amount"]').val($('#payment-total').text());
 
