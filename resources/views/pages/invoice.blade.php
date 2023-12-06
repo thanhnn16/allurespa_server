@@ -244,7 +244,7 @@
                 </div>
             </div>
             <div class="col-md-12 mt-3">
-                <div class="card card-profile">
+                <div class="card card-profile" id="print-file">
                     <img src="/img/logo.png" alt="cover" class="card-img-top center m-auto mt-2"
                          style="max-width: 64px">
                     <div class="card-body pt-0">
@@ -365,11 +365,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://sandbox.megapay.vn/pg_was/js/payment/layer/paymentClient.js"></script>
 
-
     <script>
         $(document).ready(function () {
             let treatmentsList = [];
+            let treatmentQty = [];
             let cosmeticsList = [];
+            let cosmeticQty = [];
             let customerName = null;
             let voucherId = null;
             let disCountPercent = 0;
@@ -485,7 +486,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="treatment_qty-${treatmentCounter}" class="form-control-label w-100">Số lượng
-                            <input class="form-control input-number" type="number"
+                            <input class="treatment_qty form-control input-number" type="number"
                                    name="treatment_qty[]"
                                    id="treatment_qty-${treatmentCounter}" min="1"
                                    value=""></label>
@@ -621,9 +622,18 @@
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    success: function () {
+                        $('#alert').empty().append(`
+                            <div class="alert alert-success" role="alert">
+                                Tạo đơn hàng thành công
+                            </div>
+                        `);
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
                 }).done(function (response) {
                     $('#invoiceId').text("#" + response.invoice.id);
-
                 })
 
                 $('#bill-table-body').append(`
@@ -743,6 +753,22 @@
                     }
                 })
 
+            });
+
+            $('#printInvoice').on('click', function () {
+                $.ajax({
+                    url: '/invoice-print',
+                    type: 'POST',
+                    data: {
+                        html: $('#print-file').html()
+                    },
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                }).done(function (response) {
+                    window.open(response.url, '_blank');
+                })
             });
 
         });

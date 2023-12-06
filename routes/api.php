@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TreatmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ Route::get('treatments/{id}', [TreatmentController::class, 'show'])->middleware(
 Route::get('cosmetics', [CosmeticController::class, 'index'])->middleware('json.response');
 Route::get('cosmetics/{id}', [CosmeticController::class, 'show'])->middleware('json.response');
 
+Route::get('search', [SearchController::class, 'index'])->middleware('json.response');
+
 Route::post('/login-get-token', [LoginController::class, 'loginGetToken'])->middleware('api')->name('login.get.token');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -34,4 +37,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('appointments', [AppointmentController::class, 'index'])->middleware('json.response');
     Route::get('appointments/{id}', [AppointmentController::class, 'show'])->middleware('json.response');
     Route::post('appointments', [AppointmentController::class, 'store']);
+
 });

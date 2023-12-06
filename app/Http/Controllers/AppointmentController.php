@@ -61,9 +61,14 @@ class AppointmentController extends Controller
 
             case 'edit':
                 $event = Appointment::find($request->id)->update([
-                    'event_name' => $request->event_name,
-                    'event_start' => $request->event_start,
-                    'event_end' => $request->event_end,
+                    'user_id' => $request->user_id,
+                    'treatment_id' => $request->treatment_id,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'is_consultation' => $request->is_consultation,
+                    'is_all_day' => $request->is_all_day,
+                    'note' => $request->note,
+                    'status' => $request->status,
                 ]);
 
                 return response()->json($event);
@@ -86,8 +91,8 @@ class AppointmentController extends Controller
             'treatment_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
-            'is_consultation' => 'required',
-            'is_all_day' => 'required',
+            'is_consultation' => 'nullable',
+            'is_all_day' => 'nullable',
             'note' => 'nullable',
         ]);
 

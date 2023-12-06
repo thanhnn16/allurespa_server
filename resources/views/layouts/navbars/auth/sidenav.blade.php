@@ -9,7 +9,7 @@
         </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <div class="collapse navbar-fixed navbar-collapse w-auto overflow-hidden " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}"
@@ -139,10 +139,9 @@
             </li>
         </ul>
     </div>
-    <div class="sidenav-footer mx-3 ">
+
+    <div class="sidenav-footer mt-3 ">
         <div class="card card-plain shadow-none" id="sidenavCard">
-            <img class="w-30 mx-auto" src="/img/illustrations/icon-documentation-warning.svg"
-                 alt="sidebar_illustration">
             <div class="card-body text-center p-3 w-100 pt-0">
                 <div class="docs-info">
                     <h6 class="mb-0">Cần trợ giúp?</h6>

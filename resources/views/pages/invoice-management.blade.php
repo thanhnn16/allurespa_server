@@ -100,11 +100,15 @@
                                     <input type="checkbox" class="bg-gradient-faded-dark-vertical form-check-input"
                                            id="check-all">
                                 </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th data-column="id" data-order="asc"
+                                    class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable">
                                     Mã hoá đơn
+                                    <span class="fas fa-sort"></span>
                                 </th>
-                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th data-column="full_name" data-order="asc"
+                                    class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2 sortable">
                                     Tên khách hàng
+                                    <span class="fas fa-sort"></span>
                                 </th>
                                 <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                     Ngày tạo
@@ -144,7 +148,7 @@
                                         <div class="d-flex px-3 py-1 justify-content-center align-items-center">
                                             <a class="text-sm font-weight-bold mb-0 cursor-pointer"
                                                data-bs-toggle="modal"
-                                               data-bs-target="#user-information"
+                                               data-bs-target="#invoice-details"
                                                href="#" data-id="{{ $invoice->id }}">Xem
                                             </a>
                                             <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
@@ -266,11 +270,11 @@
                                             <tfoot>
                                             <tr>
                                                 <td colspan="4" class="text-end">Tổng tiền</td>
-                                                <td class="text-end">0</td>
+                                                <td class="text-end" id="payment-sum">0</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-end">Giảm giá</td>
-                                                <td class="text-end">0</td>
+                                                <td class="text-end" id="payment-discount">0</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-end">Tổng cộng</td>
@@ -278,64 +282,9 @@
                                             </tr>
                                             </tfoot>
                                         </table>
-                                        <div class="text-center">
-                                            <form id="megapayForm" name="megapayForm" method="POST">
-                                                <input type="hidden" name="merId" value="EPAY000001">
-                                                <input type="hidden" name="merTrxId" value="">
-                                                <input type="hidden" name="encodeKey"
-                                                       value="rf8whwaejNhJiQG2bsFubSzccfRc/iRYyGUn6SPmT6y/L7A2XABbu9y4GvCoSTOTpvJykFi6b1G0crU8et2O0Q==">
-                                                <input type="hidden" name="currency" value="VND">
-                                                <input type="hidden" name="amount" data-amount="" value="">
-                                                <input type="hidden" name="invoiceNo" value="">
-                                                <input type="hidden" name="goodsNm" value="">
-                                                <input type="hidden" name="callBackUrl"
-                                                       value="http://127.0.0.1:8000/invoice">
-                                                <input type="hidden" name="notiUrl"
-                                                       value="http://127.0.0.1:8000/invoice">
-                                                <input type="hidden" name="reqDomain" value="http://localhost:8000">
-                                                <input type="hidden" name="description"
-                                                       value="Thanh toan cho Allure Spa">
-                                                <input type="hidden" name="merchantToken" value="">
-                                                <input type="hidden" name="userLanguage" value="VN">
-                                                <input type="hidden" name="timeStamp" value="">
-                                                <input type="hidden" name="windowColor" value="">
-                                                <input type="hidden" name="windowType" value="">
-                                                <div class="row text-start">
-                                                    <h6 class="text-uppercase text-sm">Hình thức thanh toán</h6>
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input" id="QR"
-                                                               name="payType"
-                                                               value="QR" checked>Mã QR
-                                                        <label class="form-check-label" for="QR">
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input" id="EW"
-                                                               name="payType"
-                                                               value="EW">Ví điện tử
-                                                        <label class="form-check-label" for="EW"><span>
-                                                    </span></label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input" id="IC"
-                                                               name="payType"
-                                                               value="IC">Thẻ tín dụng
-                                                        <label class="form-check-label">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" onclick="" id="btn-pay"
-                                                        class="btn btn-primary btn-sm">
-                                                    Thanh toán
-                                                </button>
-                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                        id="printInvoice">
-                                                    In hóa đơn
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" id="cancelInvoice">
-                                                    Hủy hóa đơn
-                                                </button>
-                                            </form>
+                                        <div class="text-start">
+                                            <span class="text-sm">Trạng thái đơn hàng</span>:
+                                            <span class="text-sm" id="status"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -438,7 +387,46 @@
                         if (response.error) {
                             sessionStorage.setItem('error', response.error);
                         } else {
-                            console.log(response);
+                            let status = response.invoice.status === 'pending' ? 'Đang chờ xử lý' : response.invoice.status === 'processing' ? 'Đang xử lý' : response.invoice.status === 'completed' ? 'Hoàn thành' : 'Đã huỷ';
+                            $('#invoiceId').text('#' + response.invoice.id);
+                            $('#customerName').text(response.invoice.full_name);
+                            $('#noteBill').text(response.invoice.note);
+                            $('#createdDate').text(response.invoice.created_at);
+                            $('#status').text(status);
+                            $('#bill-table-body').empty();
+                            let total = 0;
+                            let paymentTotal = 0;
+                            let i = 1;
+                            response.invoiceTreatments.forEach(function (item) {
+                                $('#bill-table-body').append('<tr>' +
+                                    '<td>' + i + '</td>' +
+                                    '<td>' + item.treatment_name + '</td>' +
+                                    '<td>' + item.total_amount + '</td>' +
+                                    '<td>' + item.treatment_quantity + '</td>' +
+                                    '<td>' + item.total_amount * item.treatment_quantity + '</td>' +
+                                    '</tr>');
+                                total += item.total_amount * item.treatment_quantity;
+                                i++;
+                            });
+                            response.invoiceCosmetics.forEach(function (item) {
+                                $('#bill-table-body').append('<tr>' +
+                                    '<td>' + i + '</td>' +
+                                    '<td>' + item.cosmetic_name + '</td>' +
+                                    '<td>' + item.total_amount + '</td>' +
+                                    '<td>' + item.cosmetic_quantity + '</td>' +
+                                    '<td>' + item.total_amount * item.cosmetic_quantity + '</td>' +
+                                    '</tr>');
+                                total += item.total_amount * item.cosmetic_quantity;
+                                i++;
+                            });
+
+                            paymentTotal = total - (!response.invoice.discount ? 0 : response.invoice.discount);
+                            $('#payment-sum').text(total);
+                            $('#payment-discount').text(!response.invoice.discount ? 0 : response.invoice.discount);
+                            $('#payment-total').text(paymentTotal);
+
+
+
                         }
                     },
                 })
@@ -479,6 +467,33 @@
                 }
             });
 
+            let sortIdOrder = 'desc';
+            let sortNameOrder = 'desc';
+
+            $('.sortable').click(function () {
+                let column = $(this).attr('data-column');
+                let order = $(this).attr('data-order');
+                let arrow = '';
+                if (order === 'desc') {
+                    $(this).attr('data-order', 'asc');
+                    arrow = '<span class="fas fa-sort-up"></span>';
+                } else {
+                    $(this).attr('data-order', 'desc');
+                    arrow = '<span class="fas fa-sort-down"></span>';
+                }
+
+                let urlParams = new URLSearchParams(window.location.search);
+                let invoicesPerPage = urlParams.get('invoicesPerPage');
+                let search = urlParams.get('search');
+                if (search) {
+                    window.location.href = '?invoicesPerPage=' + invoicesPerPage + '&page=1&sort=' + column + '&order=' + order + '&search=' + !search ? '' : search;
+                } else {
+                    window.location.href = '?invoicesPerPage=10&page=1&orderBy=' + column + '&order=' + order + '&search=' + !search ? '' : search;
+                }
+
+            });
+
+
             let urlParams = new URLSearchParams(window.location.search);
             let invoicesPerPage = urlParams.get('invoicesPerPage');
             let search = urlParams.get('search');
@@ -496,6 +511,7 @@
                 }
             }
         });
+
 
     </script>
 @endsection

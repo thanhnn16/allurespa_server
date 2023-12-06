@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\InvoiceCosmetic;
 use App\Models\InvoiceTreatment;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -22,8 +26,6 @@ class InvoiceController extends Controller
             'user_id' => 'required',
             'voucher_id' => 'nullable',
             'note' => 'nullable',
-            'created_at' => 'required',
-            'updated_at' => 'required',
         ]);
 
         $invoiceData['status'] = 'pending';
@@ -33,12 +35,13 @@ class InvoiceController extends Controller
 
             $invoceId = $invoice->id;
             $treatments = $request->treatments;
+
             foreach ($treatments as $treatment) {
                 $invoice->invoiceTreatments()->create([
                     'invoice_id' => $invoceId,
                     'treatment_id' => $treatment['id'],
-                    'quantity' => $treatment['quantity'],
-                    'price' => $treatment['price'],
+                    'treatment_quantity' => $treatment['quantity'],
+                    'total_amount' => $treatment['price'],
                 ]);
             }
 
@@ -47,11 +50,10 @@ class InvoiceController extends Controller
                 $invoice->invoiceCosmetics()->create([
                     'invoice_id' => $invoceId,
                     'cosmetic_id' => $cosmetic['id'],
-                    'quantity' => $cosmetic['quantity'],
-                    'price' => $cosmetic['price'],
+                    'cosmetic_quantity' => $cosmetic['quantity'],
+                    'total_amount' => $cosmetic['price'],
                 ]);
             }
-
 
             return response()->json([
                 'success' => 'Thêm hóa đơn thành công',
@@ -59,28 +61,33 @@ class InvoiceController extends Controller
             ]);
         } catch (QueryException $e) {
             return response()->json([
-                'error' => 'Thêm hóa đơn thất bại'
+                'error' => 'Thêm hóa đơn thất bại',
+                'message' => $e->getMessage(), // Add this line
             ], 500);
         }
     }
 
-    public function management(Request $request)
+    public function management(Request $request): Application|Factory|View|\Illuminate\Contracts\Foundation\Application
     {
+        $orderBy = $request->get('orderBy', 'id');
+        $order = $request->get('order', 'asc');
+
         $invoicesPerPage = $request->get('invoicesPerPage', 10);
+
         $invoices = Invoice::query()
-            ->where(function ($query) use ($request) {
-                $query->where('invoices.id', 'like', '%' . $request->get('search', '') . '%')
-                    ->orWhere('invoices.user_id', 'like', '%' . $request->get('search', '') . '%');
-            })
             ->select('invoices.*', 'users.full_name')
             ->join('users', 'invoices.user_id', '=', 'users.id')
-            ->orderBy('invoices.id', 'desc')
+            ->where(function ($query) use ($request) {
+                $query->where('invoices.id', 'like', '%' . $request->get('search', '') . '%')
+                    ->orWhere('users.full_name', 'like', '%' . $request->get('search', '') . '%');
+            })
+            ->orderBy($orderBy, $order)
             ->paginate($invoicesPerPage);
 
         return view('pages.invoice-management', ['invoices' => $invoices]);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $invoice = Invoice::query()
             ->where('invoices.id', $id)
@@ -88,10 +95,19 @@ class InvoiceController extends Controller
             ->join('users', 'invoices.user_id', '=', 'users.id')
             ->first();
 
-        $invoiceTreatments = $invoice->invoiceTreatments;
-        $invoiceCosmetics = $invoice->invoiceCosmetics;
+        $invoiceTreatments = InvoiceTreatment::query()
+            ->where('invoice_id', $id)
+            ->select('invoice_treatments.*', 'treatments.treatment_name')
+            ->join('treatments', 'invoice_treatments.treatment_id', '=', 'treatments.id')
+            ->get();
 
-        return view('pages.invoice-details', [
+        $invoiceCosmetics = InvoiceCosmetic::query()
+            ->where('invoice_id', $id)
+            ->select('invoice_cosmetics.*', 'cosmetics.cosmetic_name')
+            ->join('cosmetics', 'invoice_cosmetics.cosmetic_id', '=', 'cosmetics.id')
+            ->get();
+
+        return response()->json([
             'invoice' => $invoice,
             'invoiceTreatments' => $invoiceTreatments,
             'invoiceCosmetics' => $invoiceCosmetics,
@@ -129,5 +145,10 @@ class InvoiceController extends Controller
                 'error' => 'Xóa hóa đơn thất bại'
             ], 500);
         }
+    }
+
+    public function printToPDF(Request $request){
+        $pdf = PDF::loadHTML($request->get('html'));
+        return $pdf->download('invoice.pdf');
     }
 }

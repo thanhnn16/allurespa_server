@@ -91,3 +91,5 @@ VALUES (1, 'users', 1, 'insert', NOW()),
        (3, 'users', 3, 'insert', NOW()),
        (4, 'users', 4, 'insert', NOW()),
        (5, 'users', 5, 'insert', NOW());
+
+update users set role = 'admin' where id = 1;

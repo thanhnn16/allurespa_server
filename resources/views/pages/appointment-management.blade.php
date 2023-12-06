@@ -542,17 +542,28 @@
                     });
                 },
                 eventDrop: function (event, delta) {
-                    const event_start = $.fullCalendar.formatDate(event.start, "DD-MM-Y");
+                    const event_start = $.fullCalendar.formatDate(event.start, "YYYY-MM-DD HH:mm:ss");
+                    const event_end = $.fullCalendar.formatDate(event.end, "YYYY-MM-DD HH:mm:ss");
+
                     $.ajax({
-                        url: '/appointment-management',
+                        url: '/appointment-management/' + event.id,
                         data: {
-                            title: event.event_name,
-                            start: event_start,
-                            id: event.id,
-                            type: 'edit'
+                            start_date: event_start,
+                            end_date: event_end,
                         },
-                        type: "POST",
+                        type: "PUT",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        },
                         success: function (response) {
+                            if (response.error) {
+                                alert(response.error);
+                                return;
+                            }
+                            alert('Cập nhật lịch hẹn thành công');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Có lỗi xảy ra khi cập nhật lịch hẹn');
                         }
                     });
                 },

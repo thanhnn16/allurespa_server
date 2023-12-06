@@ -39,4 +39,12 @@ class Invoice extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+
+    public function getTotalAmountAttribute()
+    {
+        $treatmentTotal = $this->invoiceTreatments->sum('total_amount');
+        $cosmeticsTotal = $this->invoiceCosmetics->sum('total_amount');
+
+        return $treatmentTotal + $cosmeticsTotal;
+    }
 }

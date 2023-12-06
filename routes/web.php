@@ -81,14 +81,17 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for appointment
     Route::get('/appointment-management', [AppointmentController::class, 'index'])->name('appointment-management');
     Route::get('/appointment-management/{id}', [AppointmentController::class, 'show'])->name('appointment-management.show');
+    Route::put('/appointment-management/{id}', [AppointmentController::class, 'update'])->name('appointment-management.update');
     Route::get('/appointment-management-create', [AppointmentController::class, 'create'])->name('appointment-management.create');
     Route::post('/appointment-management', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.store');
 
 //    route for invoice
     Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice');
     Route::get('/invoice-management', [InvoiceController::class, 'management'])->name('invoice.management');
+    Route::post('/invoice-print', [InvoiceController::class, 'printToPDF'])->name('invoice.print');
     Route::post('/invoice-create', [InvoiceController::class, 'store'])->name('invoice.create');
     Route::get('/invoice-details/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/invoice-management/sort', [InvoiceController::class, 'sort'])->name('invoice.sort');
     Route::post('/invoice-details/delete-selected', [InvoiceController::class, 'deleteSelected'])->name('invoice.delete-selected');
     Route::delete('/invoice-details/{id}', [InvoiceController::class, 'delete'])->name('invoice.delete');
 
@@ -100,7 +103,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 //    route for home
-    Route::get('/home', [HomeController::class, 'home'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/chat', [PageController::class, 'chat'])->name('chat');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
