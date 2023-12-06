@@ -5,6 +5,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -83,8 +85,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/appointment-management', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.store');
 
 //    route for invoice
-    Route::get('/invoice', [PageController::class, 'invoice'])->name('invoice');
-    Route::post('/invoice', [PageController::class, 'crate'])->name('invoice.create');
+    Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice');
+    Route::get('/invoice-management', [InvoiceController::class, 'management'])->name('invoice.management');
+    Route::post('/invoice-create', [InvoiceController::class, 'store'])->name('invoice.create');
+    Route::get('/invoice-details/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('/invoice-details/delete-selected', [InvoiceController::class, 'deleteSelected'])->name('invoice.delete-selected');
+    Route::delete('/invoice-details/{id}', [InvoiceController::class, 'delete'])->name('invoice.delete');
+
+//    route for voucher
+    Route::post('/voucher-create', [VoucherController::class, 'store'])->name('voucher.create');
+    Route::get('/voucher', [VoucherController::class, 'index'])->name('voucher');
+    Route::get('/voucher/{id}', [VoucherController::class, 'show'])->name('voucher.show');
+    Route::post('/voucher-check', [VoucherController::class, 'check'])->name('voucher.check');
+
 
 //    route for home
     Route::get('/home', [HomeController::class, 'home'])->name('home');

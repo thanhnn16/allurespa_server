@@ -100,30 +100,58 @@ CREATE TABLE invoices
     id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     user_id    INT             NOT NULL,
     voucher_id INT,
+    note               VARCHAR(255),
+    status             ENUM ('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
     created_at DATETIME        NOT NULL DEFAULT NOW(),
     updated_at DATETIME        NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (voucher_id) REFERENCES vouchers (id)
 );
 
-CREATE TABLE invoice_details
+CREATE TABLE invoice_treatments
 (
     id                 INT PRIMARY KEY AUTO_INCREMENT                           NOT NULL,
     invoice_id         INT                                                      NOT NULL,
     treatment_id       INT                                                      NOT NULL,
-    is_cash            TINYINT(1)                                               NOT NULL DEFAULT 0,
-    cosmetic_id        INT                                                      NOT NULL,
     treatment_quantity INT                                                      NOT NULL,
-    cosmetic_quantity  INT                                                      NOT NULL,
     total_amount       integer                                                  NOT NULL,
-    note               VARCHAR(255),
-    status             ENUM ('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
     created_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
     updated_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
     FOREIGN KEY (invoice_id) REFERENCES invoices (id),
-    FOREIGN KEY (treatment_id) REFERENCES treatments (id),
+    FOREIGN KEY (treatment_id) REFERENCES treatments (id)
+);
+
+CREATE TABLE invoice_cosmetics
+(
+    id                 INT PRIMARY KEY AUTO_INCREMENT                           NOT NULL,
+    invoice_id         INT                                                      NOT NULL,
+    cosmetic_id        INT                                                      NOT NULL,
+    cosmetic_quantity  INT                                                      NOT NULL,
+    total_amount       integer                                                  NOT NULL,
+    created_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
+    updated_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (invoice_id) REFERENCES invoices (id),
     FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id)
 );
+#
+# CREATE TABLE invoice_details
+# (
+#     id                 INT PRIMARY KEY AUTO_INCREMENT                           NOT NULL,
+#     invoice_id         INT                                                      NOT NULL,
+#     treatment_id       INT                                                      NOT NULL,
+#     is_cash            TINYINT(1)                                               NOT NULL DEFAULT 0,
+#     cosmetic_id        INT                                                      NOT NULL,
+#     treatment_quantity INT                                                      NOT NULL,
+#     cosmetic_quantity  INT                                                      NOT NULL,
+#     total_amount       integer                                                  NOT NULL,
+#     note               VARCHAR(255),
+#     status             ENUM ('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
+#     created_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
+#     updated_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
+#     FOREIGN KEY (invoice_id) REFERENCES invoices (id),
+#     FOREIGN KEY (treatment_id) REFERENCES treatments (id),
+#     FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id)
+# );
 
 CREATE TABLE shopping_cart
 (
@@ -234,34 +262,34 @@ VALUES ('FACIAL', NOW(), NOW()),
        ('Gói VIP', NOW(), NOW());
 INSERT INTO treatments (treatment_name, treatment_category_id, description, execution_time, price, image, created_at,
                         updated_at)
-VALUES ('Facial Photo', 1, 'Chống lão hóa và phục hồi lão hóa da bằng ánh sáng photo', '45 phút', 1750000, '', NOW(), NOW()),
-       ('Facial Illustrious', 1, 'Dưỡng trắng - trị nám ILLUSTRIOUS', '80 phút', 3200000, '', NOW(), NOW()),
-       ('Facial Amino', 1, 'Chống nhăn, thăm mụn, và nâng cơ cải thiện cấu trúc da', '60 phút', 2150000, '', NOW(), NOW()),
-       ('Facil Collagen Tươi', 1, 'Hồi sinh làn da từ Collagen tươi', '55 phút', 1950000, '', NOW(), NOW()),
-       ('Facial Rose De Mer', 1, 'Pelling bằng phương pháp vật lý', '70 phút', 3950000, '', NOW(), NOW()),
-       ('Massage Body 1', 2, 'Thư giãn toàn thân', '65 phút', 450000, '', NOW(), NOW()),
-       ('Massage Body 2', 2, 'Thải độc ruột', '55 phút', 750000, '', NOW(), NOW()),
-       ('Mssage Body 3', 2, 'Nâng cơ vòng 1', '65 phút', 950000, '', NOW(), NOW()),
-       ('Gội đầu thư giãn', 2, 'Gội đầu thư giãn (đầu, cổ, vai, gáy)', '65 phút', 190000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Bụng', 3, 'Giảm béo gói 10 lần: Bụng', '55 phút', 8500000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Eo', 3, 'Giảm béo gói 10 lần: Eo', '45 phút', 6500000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Lưng', 3, 'Giảm béo gói 10 lần: Lưng', '55 phút', 5500000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Tay', 3, 'Giảm béo gói 10 lần: Tay', '45 phút', 5500000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Chân', 3, 'Giảm béo gói 10 lần: Chân', '55 phút', 7500000, '', NOW(), NOW()),
-       ('Giảm béo gói 10 lần: Mông', 3, 'Giảm béo gói 10 lần: Mông', '40 phút', 6500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Nách', 4, 'Triệt lông gói 10 lần: Nách', '35 phút', 4500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Bikini', 4, 'Triệt lông gói 10 lần: Bikini', '45 phút', 12500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Mặt', 4, 'Triệt lông gói 10 lần: Mặt', '45 phút', 11500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Chân', 4, 'Triệt lông gói 10 lần: Chân', '65 phút', 14500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Tay', 4, 'Triệt lông gói 10 lần: Tay', '45 phút', 11500000, '', NOW(), NOW()),
-       ('Triệt lông gói 10 lần: Toàn thân', 4, 'Triệt lông gói 10 lần: Toàn thân', '95 phút', 35000000, '', NOW(), NOW()),
-       ('Gói VIP 1', 5, '5 Amino, 5 Collegen tươi, 2 Rose Demer, 3 massage body', '2 năm', 19500000, '', NOW(), NOW()),
-       ('Gói VIP 2', 5, '10 Amino, 10 Collagen tươi, 2 Photo, 2 Rose, 5 massage', '2 năm', 39000000, '', NOW(), NOW()),
-       ('Gói VIP 3', 5, '20 Amino, 20 Collagen tươi, 5 rose demer, 15 massage body', '2 năm', 59700000, '', NOW(),
+VALUES ('Facial Photo', 1, 'Chống lão hóa và phục hồi lão hóa da bằng ánh sáng photo', '45 phút', 1750000, './uploads/img/treatments/photo_facial.jpg', NOW(), NOW()),
+       ('Facial Illustrious', 1, 'Dưỡng trắng - trị nám ILLUSTRIOUS', '80 phút', 3200000, './uploads/img/treatments/bionic_mask.jpg', NOW(), NOW()),
+       ('Facial Amino', 1, 'Chống nhăn, thăm mụn, và nâng cơ cải thiện cấu trúc da', '60 phút', 2150000, './uploads/img/treatments/amino.jpg', NOW(), NOW()),
+       ('Facil Collagen Tươi', 1, 'Hồi sinh làn da từ Collagen tươi', '55 phút', 1950000, './uploads/img/treatments/./uploads/img/treatments/collagen.jpg', NOW(), NOW()),
+       ('Facial Rose De Mer', 1, 'Pelling bằng phương pháp vật lý', '70 phút', 3950000, './uploads/img/treatments/rose_der_mer.png', NOW(), NOW()),
+       ('Massage Body 1', 2, 'Thư giãn toàn thân', '65 phút', 450000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Massage Body 2', 2, 'Thải độc ruột', '55 phút', 750000, './uploads/img/treatments/massage_2.jpg', NOW(), NOW()),
+       ('Massage Body 3', 2, 'Nâng cơ vòng 1', '65 phút', 950000, './uploads/img/treatments/massage_3.jpg', NOW(), NOW()),
+       ('Gội đầu thư giãn', 2, 'Gội đầu thư giãn (đầu, cổ, vai, gáy)', '65 phút', 190000, './uploads/img/treatments/goidau.jpg', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Bụng', 3, 'Giảm béo gói 10 lần: Bụng', '55 phút', 8500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Eo', 3, 'Giảm béo gói 10 lần: Eo', '45 phút', 6500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Lưng', 3, 'Giảm béo gói 10 lần: Lưng', '55 phút', 5500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Tay', 3, 'Giảm béo gói 10 lần: Tay', '45 phút', 5500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Chân', 3, 'Giảm béo gói 10 lần: Chân', '55 phút', 7500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Giảm béo gói 10 lần: Mông', 3, 'Giảm béo gói 10 lần: Mông', '40 phút', 6500000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Nách', 4, 'Triệt lông gói 10 lần: Nách', '35 phút', 4500000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Bikini', 4, 'Triệt lông gói 10 lần: Bikini', '45 phút', 12500000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Mặt', 4, 'Triệt lông gói 10 lần: Mặt', '45 phút', 11500000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Chân', 4, 'Triệt lông gói 10 lần: Chân', '65 phút', 14500000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Tay', 4, 'Triệt lông gói 10 lần: Tay', '45 phút', 11500000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Triệt lông gói 10 lần: Toàn thân', 4, 'Triệt lông gói 10 lần: Toàn thân', '95 phút', 35000000, './uploads/img/treatments/trietlong.jpg', NOW(), NOW()),
+       ('Gói VIP 1', 5, '5 Amino, 5 Collegen tươi, 2 Rose Demer, 3 massage body', '2 năm', 19500000, './uploads/img/treatments/vip.png', NOW(), NOW()),
+       ('Gói VIP 2', 5, '10 Amino, 10 Collagen tươi, 2 Photo, 2 Rose, 5 massage', '2 năm', 39000000, './uploads/img/treatments/vip.png', NOW(), NOW()),
+       ('Gói VIP 3', 5, '20 Amino, 20 Collagen tươi, 5 rose demer, 15 massage body', '2 năm', 59700000, './uploads/img/treatments/vip.png', NOW(),
         NOW()),
-       ('Gói VIP 4', 5, '20 Amino, 20 Collagen tươi, 5 rose demer, 15 massage body', '1 năm', 79500000, '', NOW(),
+       ('Gói VIP 4', 5, '20 Amino, 20 Collagen tươi, 5 rose demer, 15 massage body', '1 năm', 79500000, './uploads/img/treatments/vip.png', NOW(),
         NOW()),
-       ('Gói VIP 5', 5, '1 năm sử dụng toàn bộ dịch vụ', '1 năm', 99500000, '', NOW(), NOW());
+       ('Gói VIP 5', 5, '1 năm sử dụng toàn bộ dịch vụ', '1 năm', 99500000, './uploads/img/treatments/vip.png', NOW(), NOW());
 INSERT INTO cosmetic_categories (cosmetic_category_name, created_at, updated_at)
 VALUES ('Celbest', NOW(), NOW()),
        ('Faith', NOW(), NOW());

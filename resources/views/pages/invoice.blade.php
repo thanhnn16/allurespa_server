@@ -219,6 +219,9 @@
                                         <input type="text" class="form-control" id="voucher"
                                                placeholder="Nhập mã giảm giá ở đây" name="voucher"/>
                                     </div>
+                                    <button type="button" id="check-voucher" class="btn btn-primary btn-sm">Áp dụng
+                                    </button>
+                                    <div id="voucher-result"></div>
                                 </div>
                             </div>
                             <hr class="horizontal dark">
@@ -368,7 +371,8 @@
             let treatmentsList = [];
             let cosmeticsList = [];
             let customerName = null;
-
+            let voucherId = null;
+            let disCountPercent = 0;
             let treatmentCounter = 0;
             let cosmeticCounter = 0;
             let currentField = null;
@@ -593,7 +597,6 @@
 
             $('#create-invoice').on('submit', function (e) {
                 e.preventDefault();
-                console.log('submit')
 
                 let customerId = $('#find_customer').attr('data-id');
                 let note = $('#note').val();
@@ -603,6 +606,25 @@
                 $('#customerName').text(customerName);
                 $('#noteBill').text(note);
                 $('#createdDate').text(moment().format('HH:mm:ss - DD/MM/YYYY'));
+
+                $.ajax({
+                    url: '/invoice-create',
+                    type: 'POST',
+                    data: {
+                        treatments: treatmentsList,
+                        cosmetics: cosmeticsList,
+                        user_id: customerId,
+                        voucher_id: $('#voucher').val(),
+                        note: note
+                    },
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                }).done(function (response) {
+                    $('#invoiceId').text("#" + response.invoice.id);
+
+                })
 
                 $('#bill-table-body').append(`
                     <tr>
@@ -671,7 +693,7 @@
 
                 $('#megapayForm').find('input[name="goodsNm"]').val(goodsNm);
 
-                $('#megapayForm').find('input[name="invoiceNo"]').val("ORD_" + timeStamp);
+                $('#megapayForm').find('input[name="invoiceNo"]').val("ALLURESPA_ORD_" + timeStamp);
 
                 $('#megapayForm').find('input[name="amount"]').val($('#payment-total').text());
 
@@ -686,6 +708,43 @@
                 openPayment(1, "https://sandbox.megapay.vn");
             });
 
+            $('#check-voucher').on('click', function (e) {
+                e.preventDefault();
+                let voucher = $('#voucher').val();
+                $.ajax({
+                    url: '/voucher-check',
+                    type: 'POST',
+                    data: {
+                        voucher: voucher
+                    },
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        if (response.error) {
+                            $('#voucher-result').empty().append(`
+                            <div class="alert alert-danger" role="alert">
+                                ${response.error}
+                            </div>
+                        `);
+                        } else {
+                            $('#voucher-result').empty().append(`
+                            <div class="alert alert-success" role="alert">
+                                ${response.success}
+                            </div>
+                        `);
+                            voucherId = response.voucher.id;
+                            disCountPercent = response.voucher.discount_percent;
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                })
+
+            });
+
         });
 
         $(document).on('click', '#removeTreatment', function () {
@@ -695,40 +754,6 @@
         $(document).on('click', '#removeCosmetic', function () {
             $(this).closest('.col-md-12').remove();
         });
-
-        // $('#btn-pay').on('click', function (e) {
-        //     e.preventDefault();
-        //     $.ajax({
-        //             url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
-        //             type: 'POST',
-        //             data: {
-        //                 vnp_Version: "2.1.0",
-        //                 vnp_Command: "pay",
-        //                 vnp_TmnCode: "TFL3IR0W",
-        //                 vnp_Amount: 100000,
-        //                 vnp_CreateDate: "20210823111111",
-        //                 vnp_CurrCode: "VND",
-        //                 vnp_IpAddr: "192.168.1.30",
-        //                 vnp_Locale: "vn",
-        //                 vnp_OrderInfo: "Thanh toan don hang",
-        //                 vnp_ReturnUrl: "http://localhost:8000/invoice",
-        //                 vnp_TxnRef: "EPAY0000011",
-        //                 vnp_SecureHash: "KNPYLTFSMETODQGJMDYDQHTCXSFRDQIE",
-        //             },
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //             },
-        //             success: function (response) {
-        //                 console.log(response)
-        //             },
-        //             error: function (response) {
-        //                 console.log(response);
-        //             }
-        //
-        //         }
-        //     )
-        // });
-
 
     </script>
 

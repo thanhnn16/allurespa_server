@@ -31,16 +31,24 @@
                     <span class="nav-link-text ms-1">Chat</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'invoice' ? 'active' : '' }}"
-                   href="{{ route('invoice') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Đơn hàng</span>
-                </a>
+            <li class="nav-item mt-3 d-flex align-items-center">
+                <div class="ps-4">
+                </div>
+                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">
+                    Quản lý</h6>
             </li>
+            <li class="nav-item">
+                <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'invoice' ? 'active' : '' }}"
+                   href="{{ route('invoice') }}">
+                    <i class="ni ni-cart text-primary text-sm opacity-10"></i>
+                    <span class="nav-link-text">Tạo đơn hàng</span>
+                </a></li>
+            <li class="nav-item">
+                <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'invoice.management' ? 'active' : '' }}"
+                   href="{{ route('invoice.management') }}">
+                    <i class="ni ni-cart text-primary text-sm opacity-10"></i>
+                    <span class="nav-link-text">Quản lý đơn hàng</span>
+                </a></li>
             <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                 </div>
