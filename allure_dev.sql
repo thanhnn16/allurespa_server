@@ -1,4 +1,5 @@
 # Create database
+drop schema if exists allure_dev;
 create database allure_dev;
 use allure_dev;
 #
