@@ -37,6 +37,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('appointments', [AppointmentController::class, 'index'])->middleware('json.response');
     Route::get('appointments/{id}', [AppointmentController::class, 'show'])->middleware('json.response');
-    Route::post('appointments', [AppointmentController::class, 'store']);
+    Route::post('appointment-management', [AppointmentController::class, 'calendarEvents'])->middleware('json.response');
 
 });

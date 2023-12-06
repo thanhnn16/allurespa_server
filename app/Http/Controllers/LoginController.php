@@ -55,7 +55,8 @@ class LoginController extends Controller
             $token = $request->user()->createToken('miwth16')->plainTextToken;
             return response()->json([
                 'token' => $token,
-                'user' => Auth::user()
+                'user' => Auth::user(),
+                'user_id' => Auth::user()->id,
             ]);
         }
         return response()->json([
