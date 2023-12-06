@@ -297,8 +297,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/vi.js'></script>
 
-    {{--    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>--}}
-
     <script>
         const appointmentsData = {!! json_encode($appointments) !!};
         console.log(appointmentsData)
@@ -482,14 +480,14 @@
                         $('#appointment-create select[name="status"]').val('pending');
                     });
 
-                    $('#create-button').click(function () {
+                    $('#create-button').on('click', function (e) {
+                        e.preventDefault();
                         let full_name = $('#appointment-create input[name="full_name"]').val();
                         let phone_number = $('#appointment-create input[name="phone_number"]').val();
                         let start_date = moment($('#appointment-create input[name="start_date"]').val()).format('YYYY-MM-DD HH:mm');
                         let end_date = moment($('#appointment-create input[name="end_date"]').val()).format('YYYY-MM-DD HH:mm');
                         let note = $('#appointment-create textarea[name="note"]').val();
                         let status = $('#appointment-create select[name="status"]').val();
-                        console.log(start_date, end_date);
                         if (!full_name) {
                             alert('Vui lòng nhập họ và tên');
                             return false;
@@ -536,29 +534,30 @@
                                 }
                                 $('#appointment-create').modal('hide');
                                 $('#reset-button').click();
-                                // location.reload();
+                                location.reload();
                             }
                         });
                     });
                 },
                 eventDrop: function (event, delta) {
-                    const event_start = $.fullCalendar.formatDate(event.start, "YYYY-MM-DD HH:mm:ss");
-                    const event_end = $.fullCalendar.formatDate(event.end, "YYYY-MM-DD HH:mm:ss");
+                    const event_start = $.fullCalendar.formatDate(event.start, "YYYY-MM-DD HH:mm");
+                    const event_end = $.fullCalendar.formatDate(event.end, "YYYY-MM-DD HH:mm");
 
                     $.ajax({
                         url: '/appointment-management/' + event.id,
                         data: {
                             start_date: event_start,
                             end_date: event_end,
+                            type: 'edit',
                         },
-                        type: "PUT",
+                        type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                         },
                         success: function (response) {
                             if (response.error) {
-                                alert(response.error);
-                                return;
+                                console.log(response.error);
+                                alert('Có lỗi xảy ra khi cập nhật lịch hẹn');
                             }
                             alert('Cập nhật lịch hẹn thành công');
                         },

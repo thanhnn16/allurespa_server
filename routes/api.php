@@ -23,6 +23,7 @@ Route::get('treatments', [TreatmentController::class, 'index'])->middleware('jso
 Route::get('treatments/{id}', [TreatmentController::class, 'show'])->middleware('json.response');
 
 Route::get('cosmetics', [CosmeticController::class, 'index'])->middleware('json.response');
+Route::get('cosmetics-best', [CosmeticController::class, 'getTopCosmetics'])->middleware('json.response');
 Route::get('cosmetics/{id}', [CosmeticController::class, 'show'])->middleware('json.response');
 
 Route::get('search', [SearchController::class, 'index'])->middleware('json.response');

@@ -55,6 +55,22 @@ class CosmeticController extends Controller
         ]);
     }
 
+    public function getTopCosmetics(): JsonResponse
+    {
+        $cosmeticInvoiceCount = Cosmetic::query()
+            ->join('invoice_cosmetics', 'invoice_cosmetics.cosmetic_id', '=', 'cosmetics.id')
+            ->selectRaw('cosmetics.*, count(invoice_cosmetics.cosmetic_id) as cosmetic_invoice_count')
+            ->groupBy('cosmetics.id')
+            ->orderByDesc('cosmetic_invoice_count')
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'cosmetics' => $cosmeticInvoiceCount
+        ]);
+
+    }
+
     public function update(Request $request, $id): JsonResponse
     {
         $request->validate([

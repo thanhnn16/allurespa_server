@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
 //    route for appointment
     Route::get('/appointment-management', [AppointmentController::class, 'index'])->name('appointment-management');
     Route::get('/appointment-management/{id}', [AppointmentController::class, 'show'])->name('appointment-management.show');
-    Route::put('/appointment-management/{id}', [AppointmentController::class, 'update'])->name('appointment-management.update');
+    Route::post('/appointment-management/{id}', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.update');
     Route::get('/appointment-management-create', [AppointmentController::class, 'create'])->name('appointment-management.create');
     Route::post('/appointment-management', [AppointmentController::class, 'calendarEvents'])->name('appointment-management.store');
 

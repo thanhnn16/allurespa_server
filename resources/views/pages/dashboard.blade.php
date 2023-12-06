@@ -97,6 +97,7 @@
                 </div>
             </div>
         </div>
+        {{--
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="card">
@@ -177,6 +178,7 @@
                 </div>
             </div>
         </div>
+        --}}
         @include('layouts.footers.auth.footer')
     </div>
 @endsection
