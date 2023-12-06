@@ -13,29 +13,33 @@ class SearchController extends Controller
         $search = $request->get('search');
         $treatments = Treatment::query()
             ->where('treatment_name', 'like', '%' . $search . '%')
-            ->select('treatment_name', 'image', 'description')
+            ->select('id', 'treatment_name', 'image', 'description')
             ->get();
 
         $cosmetics = Cosmetic::query()
             ->where('cosmetic_name', 'like', '%' . $search . '%')
-            ->select('cosmetic_name', 'image', 'description')
+            ->select('id', 'cosmetic_name', 'image', 'description')
             ->get();
 
         $results = collect();
 
         foreach ($treatments as $treatment) {
             $results->push([
+                'id' => $treatment->id,
                 'name' => $treatment->treatment_name,
                 'image' => $treatment->image,
                 'description' => $treatment->description,
+                'type' => 'treatment',
             ]);
         }
 
         foreach ($cosmetics as $cosmetic) {
             $results->push([
+                'id' => $cosmetic->id,
                 'name' => $cosmetic->cosmetic_name,
                 'image' => $cosmetic->image,
                 'description' => $cosmetic->description,
+                'type' => 'cosmetic',
             ]);
         }
 
