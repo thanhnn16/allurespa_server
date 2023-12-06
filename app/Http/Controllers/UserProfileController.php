@@ -15,28 +15,20 @@ class UserProfileController extends Controller
     public function update(Request $request)
     {
         $attributes = $request->validate([
-            'username' => ['required','max:255', 'min:2'],
-            'firstname' => ['max:100'],
-            'lastname' => ['max:100'],
             'email' => ['required', 'email', 'max:255',  Rule::unique('users')->ignore(auth()->user()->id),],
-            'address' => ['max:100'],
-            'city' => ['max:100'],
-            'country' => ['max:100'],
-            'postal' => ['max:100'],
-            'about' => ['max:255']
+            'full_name' => ['required', 'max:255'],
         ]);
 
+        $attributes['note'] = $request->get('note');
+        $attributes['password'] = bcrypt(request()->get('new_password'));
+
         auth()->user()->update([
-            'username' => $request->get('username'),
-            'firstname' => $request->get('firstname'),
-            'lastname' => $request->get('lastname'),
-            'email' => $request->get('email') ,
-            'address' => $request->get('address'),
-            'city' => $request->get('city'),
-            'country' => $request->get('country'),
-            'postal' => $request->get('postal'),
-            'about' => $request->get('about')
+            'email' => $attributes['email'],
+            'full_name' => $attributes['full_name'],
+            'note' => $attributes['note'],
+            'password' => $attributes['password'],
         ]);
-        return back()->with('succes', 'Profile succesfully updated');
+
+        return back()->with('succes', 'Cập nhật hồ sơ thành công');
     }
 }

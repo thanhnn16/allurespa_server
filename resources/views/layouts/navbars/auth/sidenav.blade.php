@@ -35,7 +35,7 @@
                 <div class="ps-4">
                 </div>
                 <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">
-                    Quản lý</h6>
+                    Hoá đơn</h6>
             </li>
             <li class="nav-item">
                 <a class="dropdown-item nav-link {{ Route::currentRouteName() == 'invoice' ? 'active' : '' }}"

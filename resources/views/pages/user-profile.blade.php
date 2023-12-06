@@ -30,7 +30,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <form role="form" method="POST" action={{ route('profile.update') }} enctype="multipart/form-data">
+                    <form role="form" id="update-form" method="POST"
+                          action={{ route('profile.update') }} enctype="multipart/form-data">
                         @csrf
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
@@ -69,13 +70,14 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Mật khẩu mới</label>
-                                        <input class="form-control" type="password" name="new_pw"
+                                        <input class="form-control" type="password" name="new_password"
                                                value="">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Nhập lại mật khẩu</label>
+                                        <label for="example-text-input" class="form-control-label">Nhập lại mật
+                                            khẩu</label>
                                         <input class="form-control" type="password" name="cf_new_pw"
                                                value="">
                                     </div>
@@ -130,8 +132,57 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
-@endsection
 
-<script>
-    console.log('Hello world')
-</script>
+    <script>
+        $(document).ready(function () {
+            $('#update-form').on('submit', function (e) {
+                e.preventDefault();
+                const old_pw = $('input[name="old_pw"]').val();
+                const new_pw = $('input[name="new_password"]').val();
+                const cf_new_pw = $('input[name="cf_new_pw"]').val();
+                if (old_pw !== '' || new_pw !== '' || cf_new_pw !== '') {
+                    if (old_pw === '') {
+                        $('#alert').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<span class="alert-icon"><i class="ni ni-like-2"></i></span>' +
+                            '<span class="alert-text"><strong>Lỗi!</strong> Vui lòng nhập mật khẩu cũ</span>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+                            '</button>' +
+                            '</div>');
+                        return false;
+                    }
+                    if (new_pw === '') {
+                        $('#alert').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<span class="alert-icon"><i class="ni ni-like-2"></i></span>' +
+                            '<span class="alert-text"><strong>Lỗi!</strong> Vui lòng nhập mật khẩu mới</span>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+                            '</button>' +
+                            '</div>');
+                        return false;
+                    }
+                    if (cf_new_pw === '') {
+                        $('#alert').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<span class="alert-icon"><i class="ni ni-like-2"></i></span>' +
+                            '<span class="alert-text"><strong>Lỗi!</strong> Vui lòng nhập lại mật khẩu mới</span>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+                            '</button>' +
+                            '</div>');
+                        return false;
+                    }
+                    if (new_pw !== cf_new_pw) {
+                        $('#alert').html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<span class="alert-icon"><i class="ni ni-like-2"></i></span>' +
+                            '<span class="alert-text"><strong>Lỗi!</strong> Mật khẩu mới không khớp</span>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+                            '</button>' +
+                            '</div>');
+                        return false;
+                    }
+                }
+                $(this).unbind('submit').submit();
+
+            });
+
+        });
+    </script>
+
+@endsection

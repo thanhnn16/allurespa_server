@@ -133,25 +133,6 @@ CREATE TABLE invoice_cosmetics
     FOREIGN KEY (invoice_id) REFERENCES invoices (id),
     FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id)
 );
-#
-# CREATE TABLE invoice_details
-# (
-#     id                 INT PRIMARY KEY AUTO_INCREMENT                           NOT NULL,
-#     invoice_id         INT                                                      NOT NULL,
-#     treatment_id       INT                                                      NOT NULL,
-#     is_cash            TINYINT(1)                                               NOT NULL DEFAULT 0,
-#     cosmetic_id        INT                                                      NOT NULL,
-#     treatment_quantity INT                                                      NOT NULL,
-#     cosmetic_quantity  INT                                                      NOT NULL,
-#     total_amount       integer                                                  NOT NULL,
-#     note               VARCHAR(255),
-#     status             ENUM ('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
-#     created_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
-#     updated_at         DATETIME                                                 NOT NULL DEFAULT NOW(),
-#     FOREIGN KEY (invoice_id) REFERENCES invoices (id),
-#     FOREIGN KEY (treatment_id) REFERENCES treatments (id),
-#     FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id)
-# );
 
 CREATE TABLE shopping_cart
 (
@@ -265,8 +246,8 @@ INSERT INTO treatments (treatment_name, treatment_category_id, description, exec
 VALUES ('Facial Photo', 1, 'Chống lão hóa và phục hồi lão hóa da bằng ánh sáng photo', '45 phút', 1750000, './uploads/img/treatments/photo_facial.jpg', NOW(), NOW()),
        ('Facial Illustrious', 1, 'Dưỡng trắng - trị nám ILLUSTRIOUS', '80 phút', 3200000, './uploads/img/treatments/bionic_mask.jpg', NOW(), NOW()),
        ('Facial Amino', 1, 'Chống nhăn, thăm mụn, và nâng cơ cải thiện cấu trúc da', '60 phút', 2150000, './uploads/img/treatments/amino.jpg', NOW(), NOW()),
-       ('Facil Collagen Tươi', 1, 'Hồi sinh làn da từ Collagen tươi', '55 phút', 1950000, './uploads/img/treatments/./uploads/img/treatments/collagen.jpg', NOW(), NOW()),
-       ('Facial Rose De Mer', 1, 'Pelling bằng phương pháp vật lý', '70 phút', 3950000, './uploads/img/treatments/rose_der_mer.png', NOW(), NOW()),
+       ('Facil Collagen Tươi', 1, 'Hồi sinh làn da từ Collagen tươi', '55 phút', 1950000, './uploads/img/treatments/collagen.jpg', NOW(), NOW()),
+       ('Facial Rose De Mer', 1, 'Pelling bằng phương pháp vật lý', '70 phút', 3950000, './uploads/img/treatments/rose_de_mer.png', NOW(), NOW()),
        ('Massage Body 1', 2, 'Thư giãn toàn thân', '65 phút', 450000, './uploads/img/treatments/massage_giam_mo.png', NOW(), NOW()),
        ('Massage Body 2', 2, 'Thải độc ruột', '55 phút', 750000, './uploads/img/treatments/massage_2.jpg', NOW(), NOW()),
        ('Massage Body 3', 2, 'Nâng cơ vòng 1', '65 phút', 950000, './uploads/img/treatments/massage_3.jpg', NOW(), NOW()),
