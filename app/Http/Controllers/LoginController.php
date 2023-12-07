@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -55,8 +56,10 @@ class LoginController extends Controller
             $token = $request->user()->createToken('miwth16')->plainTextToken;
             return response()->json([
                 'token' => $token,
-                'user' => Auth::user(),
                 'user_id' => Auth::user()->id,
+                'image' => Auth::user()->image,
+                'full_name' => Auth::user()->full_name,
+                'phone_number' => Auth::user()->phone_number,
             ]);
         }
         return response()->json([

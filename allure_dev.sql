@@ -315,3 +315,6 @@ VALUES ('Tinh chất LIPOCOLLAGE LAMELLAR', 1,
         1999000, 'Kem dạng gel chống thô ráp và mất nước cho da. Giúp da mịn màng, căng tràn sức sống.',
         'MEADOWSWEET. ACETYL HYDROXYPROLINE. MAGNESIUM ASCORBYL PHOSPHATE. CYCLIC LYSOPHOSPHATIDIC ACID. CENTELLA ASIATICA LEAF EXTRACT. CAPROOYL TETRAPEPTIDE-3. ACETYL DECAPEPTIDE-3.',
         'Sau khi thoa kem dưỡng, thoa một lượng nhỏ gel bằng cách ấn nhẹ vào da khắp mặt và vỗ nhẹ.', './uploads/img/cosmetics/nourishing_gel.jpg', NOW(), NOW());
+
+# show timezone db
+SELECT @@global.time_zone, @@session.time_zone;

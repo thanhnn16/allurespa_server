@@ -25,7 +25,7 @@
                     <h6>Thêm mỹ phẩm mới</h6>
                 </div>
                 <div class="d-flex justify-content-start align-self-auto py-1 px-2">
-                    <button class="btn bg-gradient-secondary"><a href="/user-management-create" class="link-white">Thêm
+                    <button class="btn bg-gradient-secondary"><a href="/cosmetic-management-create" class="link-white">Thêm
                             mỹ phẩm</a></button>
                     <div class="dropdown ps-2">
                         <button class="btn bg-gradient-secondary dropdown-toggle" type="button"
@@ -164,16 +164,18 @@
                                         <p class="text-sm font-weight-bold mb-0">{{ $cosmetic->cosmetic_category_name }}</p>
                                     </td>
                                     <td class="align-middle text-start text-sm max-width-200">
-                                        <p class="text-sm font-weight-bold mb-0 overflow-hidden whitespace-nowrap" style="text-overflow: ellipsis!important;">{{ $cosmetic->description != null ? $cosmetic->description : 'N/A'}}</p>
+                                        <p class="text-sm font-weight-bold mb-0 overflow-hidden whitespace-nowrap"
+                                           style="text-overflow: ellipsis!important;">{{ $cosmetic->description != null ? $cosmetic->description : 'N/A'}}</p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ number_format($cosmetic->price, 0, ',', '.') }} VNĐ</p>
+                                        <p class="text-sm font-weight-bold mb-0">{{ number_format($cosmetic->price, 0, ',', '.') }}
+                                            VNĐ</p>
                                     </td>
                                     <td class="align-middle text-end">
                                         <div class="d-flex px-3 py-1 justify-content-center align-items-center">
                                             <a class="text-sm font-weight-bold mb-0 cursor-pointer"
                                                data-bs-toggle="modal"
-                                               data-bs-target="#user-information"
+                                               data-bs-target="#cosmetic-information"
                                                href="#" data-id="{{ $cosmetic->id }}">Xem
                                             </a>
                                             <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
@@ -274,7 +276,7 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" id="user-information">
+    <div class="modal fade" tabindex="-1" id="cosmetic-information">
         <div class="modal-dialog modal-lg modal-dialog-scrollable ms-auto">
             <div class="modal-content">
                 <div class="modal-header">
@@ -285,64 +287,56 @@
                     <div class="avatar">
                         <img src="" alt="image" id="user-image" class="avatar-img rounded-circle">
                     </div>
-                    <p class="text-uppercase text-sm">THÔNG TIN CÁ NHÂN</p>
+                    <p class="text-uppercase text-sm">THÔNG TIN MỸ PHẨM</p>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Họ và tên</label>
-                                <input class="form-control" disabled type="text" name="full_name"
-                                       value="">
+                                <label for="example-text-input" class="form-control-label">Tên mỹ phẩm</label>
+                                <input class="form-control" disabled type="text" name="cosmetic_name" value="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Email: </label>
-                                <input class="form-control disabled" disabled type="email" name="email"
-                                       value="">
+                                <label for="example-text-input" class="form-control-label">Loại mỹ phẩm</label>
+                                <input class="form-control" disabled type="text" name="cosmetic_category_name" value="">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Số điện thoại: </label>
-                                <input class="form-control disabled" disabled type="tel" name="phone_number"
-                                       value="">
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Địa chỉ</label>
-                                <input class="form-control" disabled type="text" name="address"
-                                       value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Ngày sinh</label>
-                                <input class="form-control" disabled type="text" name="date_of_birth"
-                                       value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Ghi chú</label>
-                                <input class="form-control" disabled type="text" name="note"
-                                       value="">
+                                <label for="example-text-input" class="form-control-label">Giá</label>
+                                <input class="form-control" disabled type="text" name="price" value="">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="example-text-input" class="form-control-label">Tình trạng da</label>
-                                <textarea class="form-control" type="text" name="note" disabled
-                                ></textarea>
+                                <label for="example-text-input" class="form-control-label">Mô tả</label>
+                                <textarea class="form-control" type="text" name="description" disabled></textarea>
                             </div>
                         </div>
-                        <hr class="horizontal dark">
-                        <p class="text-uppercase text-sm">LỊCH SỬ ĐẶT LỊCH</p>
-                        <div id="appointment-history"></div>
-                        <hr class="horizontal dark">
-                        <p class="text-uppercase text-sm">LỊCH SỬ DỊCH VỤ</p>
-                        <div id="service-history"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Mục đích</label>
+                                <textarea class="form-control" type="text" name="purpose" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Thành phần</label>
+                                <textarea class="form-control" type="text" name="ingredients" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Cách dùng</label>
+                                <textarea class="form-control" type="text" name="how_to_use" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Tổng số đã bán</label>
+                                <input class="form-control" disabled type="text" name="total_sold" value="">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -351,7 +345,6 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).ready(function () {
             $('#check-all').change(function () {
@@ -409,7 +402,7 @@
                     e.preventDefault();
                     $('#modal-notification').modal('hide');
                     $.ajax({
-                        url: 'user-management/' + id,
+                        url: 'cosmetic-management/' + id,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -432,32 +425,46 @@
                 });
             });
 
-            $('#user-information').on('show.bs.modal', function (event) {
+            $('#cosmetic-information').on('show.bs.modal', function (event) {
                 const button = $(event.relatedTarget);
                 const id = button.data('id');
-                console.log(id)
                 $.ajax({
-                    url: 'user-management/' + id,
+                    url: 'cosmetic-management/' + id,
                     type: 'GET',
                     success: function (response) {
                         console.log(response);
                         if (response.error) {
                             console.log(response.error);
                         } else {
-                            let img = response.user.image == null ? "./img/logo.png" : response.user.image;
-                            let dob = response.user.date_of_birth == null ? 'N/A' : response.user.date_of_birth;
-                            dob = new Date(dob);
-                            dob = dob.toLocaleDateString('vi-VN');
-                            console.log(dob)
+                            let img = response.cosmetic.image == null ? "./img/logo.png" : response.cosmetic.image;
+                            let price = response.cosmetic.price == null ? 'N/A' : response.cosmetic.price;
+                            let priceLocale = price.toLocaleString('vi', {style : 'currency', currency : 'VND'});
+                            let purpose = response.cosmetic.purpose == null ? 'N/A' : response.cosmetic.purpose;
+                            let purposeList = purpose.split('. ');
+
+                            let ingredients = response.cosmetic.ingredients == null ? 'N/A' : response.cosmetic.ingredients;
+                            let ingredientsList = ingredients.split('. ');
+
+                            let howToUse = response.cosmetic.how_to_use == null ? 'N/A' : response.cosmetic.how_to_use;
+                            let howToUseList = howToUse.split('. ');
+
+                            let decription = response.cosmetic.description == null ? 'N/A' : response.cosmetic.description;
+                            let descriptionList = decription.split('. ');
+
+
+
+
                             $('#user-image').attr('src', img);
-                            $('input[name=full_name]').val(response.user.full_name);
-                            $('input[name=email]').val(response.user.email);
-                            $('input[name=phone_number]').val(response.user.phone_number);
-                            $('input[name=address]').val(response.user.address);
-                            $('input[name=date_of_birth]').val(dob);
-                            $('input[name=note]').val(response.user.note);
-                            $('#appointment-history').html(response.appointment_history);
-                            $('#service-history').html(response.service_history);
+                            $('input[name=cosmetic_name]').val(response.cosmetic.cosmetic_name);
+                            $('input[name=cosmetic_category_name]').val(response.cosmetic.cosmetic_category_name);
+                            $('textarea[name=description]').val("- " + descriptionList.join('\n- '));
+                            $('input[name=price]').val(priceLocale);
+                            $('textarea[name=usage]').val(response.cosmetic.usage);
+                            $('input[name=total_sold]').val(response.total_sold);
+                            $('textarea[name=purpose]').val("- " + purposeList.join('\n- '));
+                            $('textarea[name=ingredients]').val("- " + ingredientsList.join('\n- '));
+                            $('textarea[name=how_to_use]').val("- " + howToUseList.join('\n- '));
+
                         }
                     },
                 })
@@ -476,7 +483,7 @@
                         return;
                     }
                     $.ajax({
-                        url: '/user-management/delete-selected',
+                        url: '/cosmetic-management/delete-selected',
                         type: 'POST',
                         data: {
                             selectedIds: selectedIds,

@@ -35,4 +35,23 @@ class ImageController extends Controller
         }
         return false;
     }
+
+    public function cosmeticImageUpload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->extension();
+
+        $imagePath = public_path('uploads/img/cosmetics/' . $imageName);
+
+        Image::make($image)->resize(300, 300, function ($constrain) {
+            $constrain->aspectRatio();
+        })->encode('jpg')->save($imagePath);
+
+        return $imagePath;
+
+    }
 }

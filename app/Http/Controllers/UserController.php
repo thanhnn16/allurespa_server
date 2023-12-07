@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -32,7 +33,7 @@ class UserController extends Controller
 
     public function show($id): JsonResponse
     {
-        $user = User::with('appointments')
+        $user = User::all()
             ->find($id);
         if ($user) {
             return response()->json([
@@ -117,22 +118,31 @@ class UserController extends Controller
             'address' => 'nullable',
             'skin_condition' => 'nullable',
             'note' => 'nullable',
+            'image' => 'nullable|image|max:2048',
         ]);
         $data['password'] = '123456';
         $data['role'] = 'users';
 
         try {
             if (request()->hasFile('image')) {
-                $imageController = new ImageController;
-                $imagePath = $imageController->userImageUpload(request());
-                $imagePath = explode('/', $imagePath);
-                $imagePath = $imagePath[count($imagePath) - 1];
-                $data['image'] = "/uploads/img/users/avatar/" . $imagePath;
+                try {
+                    $imageController = new ImageController;
+                    $imagePath = $imageController->cosmeticImageUpload();
+                    $imagePath = explode('/', $imagePath);
+                    $imagePath = $imagePath[count($imagePath) - 1];
+                    $data['image'] = "./" . $imagePath;
+                } catch
+                (Exception $e) {
+                    return response()->json([
+                        'error' => $e->getMessage()
+                    ]);
+                }
             } else {
                 $data['image'] = '/img/marie.jpg';
             }
             User::create($data);
-        } catch (QueryException $e) {
+        } catch
+        (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 return response()->json([
                     'error' => 'Email hoặc số điện thoại đã tồn tại trong hệ thống.'
@@ -143,7 +153,6 @@ class UserController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
-
         return response()->json([
             'success' => 'Thêm người dùng thành công',
             'data' => $data
@@ -205,6 +214,57 @@ class UserController extends Controller
 
         return response()->json([
             'users' => $users
+        ]);
+    }
+
+    public function updateView(Request $request): Factory|\Illuminate\Foundation\Application|View|Application
+    {
+        $id = $request->get('id');
+        $user = User::find($id);
+        if (!$user) {
+            return redirect('/user-management');
+        }
+        return view('pages.user-management-update', ['user' => $user]);
+    }
+
+    public function updateUser(Request $request): JsonResponse
+    {
+        $id = $request->input('id');
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'error' => 'Người dùng không tồn tại',
+                'request' => $request->all()
+            ]);
+        }
+        $data = $request->validate([
+            'full_name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone_number' => 'required|unique:users,phone_number,' . $id,
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:1,0',
+            'address' => 'nullable',
+            'skin_condition' => 'nullable',
+            'note' => 'nullable',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $imageController = new ImageController;
+            if ($user->image != '/img/marie.jpg' && $user->image !== '') {
+                $imageController->deleteUserAvatar($user->image);
+            }
+            $imagePath = $imageController->userImageUpload($request);
+            $imagePath = explode('/', $imagePath);
+            $imagePath = $imagePath[count($imagePath) - 1];
+            $data['image'] = "/uploads/img/users/avatar/" . $imagePath;
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'success' => 'Cập nhật thông tin người dùng thành công',
+            'data' => $data
         ]);
     }
 }

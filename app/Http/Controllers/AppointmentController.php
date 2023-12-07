@@ -76,7 +76,24 @@ class AppointmentController extends Controller
             case 'delete':
                 $event = Appointment::find($request->id)->delete();
 
-                return response()->json($event);
+                if ($event) {
+                    return response()->json([
+                        'success' => 'Xóa lịch thành công',
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Có lỗi trong quá trình xóa.']);
+                }
+
+            case 'update':
+                $event = Appointment::find($request->id)->update($request->all());
+
+                if ($event) {
+                    return response()->json([
+                        'success' => 'Cập nhật lịch thành công',
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Có lỗi trong quá trình cập nhật.']);
+                }
 
             default:
                 # ...

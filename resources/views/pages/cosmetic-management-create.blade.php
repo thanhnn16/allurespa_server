@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Chỉnh sửa khách hàng'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Thêm mỹ phẩm'])
     <div class="card shadow-lg mx-4 card-profile-bottom">
         <div id="alert">
             @if (session('error'))
@@ -28,10 +28,10 @@
                 <div class="col-auto my-auto">
                     <div class="h-100">
                         <h5 class="mb-1">
-                            Chỉnh sửa khách hàng
+                            Thêm khách mỹ phẩm
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            Nhập thông tin chi tiết khách hàng
+                            Nhập thông tin chi tiết mỹ phẩm
                         </p>
                     </div>
                 </div>
@@ -45,17 +45,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form role="form" method="POST" id="form-edit-user"
-                          action={{ route('user-management.edit') }} enctype="multipart/form-data">
+                    <form role="form" method="POST" id="form-add-cosmetic"
+                          action={{ route('user-management.store') }} enctype="multipart/form-data">
                         @csrf
                         <div class="card-header pb-0">
                             <div class="d-flex align-items-center">
-                                <p class="mb-0">Chỉnh sửa thông tin</p>
+                                <p class="mb-0">Thêm mỹ phẩm mới</p>
                                 <div class="ms-auto">
                                     <button type="button" class="btn btn-dark btn-sm" onclick="window.history.back()">
                                         Quay lại
                                     </button>
-                                    <button type="submit" class="btn btn-primary btn-sm btn-edit">Lưu</button>
+                                    <button type="submit" class="btn btn-primary btn-sm btn-add">Thêm</button>
                                 </div>
                             </div>
                         </div>
@@ -63,8 +63,7 @@
                             <p class="text-uppercase text-sm">Hình ảnh</p>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label class="form-control-label ms-auto mb-4">Chọn ảnh khách
-                                        hàng</label>
+                                    <label class="form-control-label ms-auto mb-4">Thêm hình ảnh mỹ phẩm</label>
                                     <div class="form-group">
                                         <input type="file" class="form-control-file" name="image" id="image"
                                                accept="image/*">
@@ -75,85 +74,76 @@
                             <div class="row">
                                 <div class="col-md-12 mt-1">
                                     <div class="d-flex justify-content-start">
-                                        <img id="croppedImage" src="{{ $user->image }}" alt="Cropped image" style="display:
-                                block;" class="img-thumbnail max-width-200">
+                                        <img id="croppedImage" src="#" alt="Cropped image" style="display:
+                                none;" class="img-thumbnail max-width-200">
                                     </div>
                                 </div>
                             </div>
                             <hr class="horizontal dark">
-                            <p class="text-uppercase text-sm">THÔNG TIN CÁ NHÂN</p>
+                            <p class="text-uppercase text-sm">THÔNG TIN MỸ PHẨM</p>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Số điện thoại</label>
-                                        <input class="form-control" type="tel" name="phone_number"
-                                               placeholder="Số điện thoại" required maxlength="13" minlength="10"
-                                               value=" {{ $user->phone_number }}">
+                                        <label for="example-text-input" class="form-control-label">Tên mỹ phẩm</label>
+                                        <input class="form-control" type="text" name="cosmetic_name" id="cosmetic_name"
+                                               placeholder="Tên mỹ phẩm" required maxlength="255"
+                                               value="">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Địa chỉ Email</label>
-                                        <input class="form-control" type="email" name="email" placeholder="Email"
-                                               required
-                                               value="{{ $user->email }}">
+                                        <label for="cosmetic_price">Giá mỹ phẩm</label>
+                                        <input type="number" class="form-control" id="price"
+                                               name="price" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Họ và tên</label>
-                                        <input class="form-control" type="text" name="full_name" required
-                                               value="{{ $user->full_name }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Ngày sinh</label>
-                                        <input class="form-control" type="date" name="date_of_birth"
-                                               value="{{ $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '' }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="gender" class="form-control-label">Giới tính</label>
-                                        <select name="gender" class="form-select">
-                                            <option value="1" {{ $user->gender == 1 ? 'selected' : '' }}>Nam</option>
-                                            <option value="0" {{ $user->gender == 0 ? 'selected' : '' }}>Nữ</option>
+                                        <label for="cosmetic_category_id">Loại mỹ phẩm</label>
+                                        <select class="form-control" id="cosmetic_category_id" name="cosmetic_category_id" required>
+                                            <option value="">Chọn loại mỹ phẩm</option>
+                                            @foreach($cosmeticCategories as $cosmeticCategory)
+                                                <option value="{{ $cosmeticCategory->id }}">{{ $cosmeticCategory->cosmetic_category_name }}</option>
+                                            @endforeach
+
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Địa chỉ</label>
-                                        <input class="form-control" type="text" name="address"
-                                               value="{{ $user->address }}">
+                                        <label for="cosmetic_description">Mô tả mỹ phẩm</label>
+                                        <textarea class="form-control" id="description" name="description" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Mục tiêu</label>
+                                        <input class="form-control" type="text" name="purpose" id="purpose"
+                                               value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Cách dùng</label>
+                                        <input class="form-control" type="text" name="how_to_use" id="how_to_use"
+                                               value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Thành phần</label>
+                                        <input class="form-control" type="text" name="ingredients" id="ingredients"
+                                               value="">
                                     </div>
                                 </div>
                             </div>
                             <hr class="horizontal dark">
-                            <p class="text-uppercase text-sm">Thông tin thêm</p>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="skin_condition" class="form-control-label">Tình trạng da</label>
-                                        <textarea class="form-control" type="text" name="skin_condition"
-                                        >{{ $user->skin_condition }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="note" class="form-control-label">Ghi chú</label>
-                                        <textarea class="form-control" type="password" name="note"
-                                        >{{ $user->note }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="message">
                             </div>
                             <hr class="horizontal dark">
                             <div class="d-flex align-items-center">
                                 <button type="reset" class="btn btn-dark me-3">Reset</button>
-                                <button type="submit" class="btn btn-primary me-3 btn-edit">Lưu</button>
+                                <button type="submit" class="btn btn-primary me-3 btn-add">Thêm</button>
                             </div>
                         </div>
                     </form>
@@ -199,13 +189,13 @@
                                   points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                     </svg>
                     <h4 class="text-success mt-3">Thành công!</h4>
-                    <p class="mt-3">Thêm khách hàng mới thành công.</p>
+                    <p class="mt-3">Thêm mỹ phẩm mới thành công.</p>
                     <button type="button" class="btn btn-sm mt-3 btn-gradient-dark" id="ok-button"
                             data-bs-dismiss="modal">
                         Quay lại
                     </button>
-                    <button type="button" class="btn btn-sm mt-3 btn-success" id="btn-stay-here"
-                            data-bs-dismiss="modal">Ở lại trang này
+                    <button type="button" class="btn btn-sm mt-3 btn-success" id="add-more-button"
+                            data-bs-dismiss="modal">Thêm tiếp
                     </button>
                 </div>
             </div>
@@ -264,42 +254,39 @@
                 return new File([u8arr], filename, {type: mime});
             }
 
-            $('.btn-edit').on('click', function (e) {
+            $('.btn-add').on('click', function (e) {
                 e.preventDefault();
-                const formData = new FormData($('#form-edit-user')[0]);
-                formData.append('id', {{ $user->id }});
+                const formData = new FormData($('#form-add-cosmetic')[0]);
                 for (const pair of formData.entries()) {
                     console.log(pair[0] + ', ' + pair[1]);
                 }
 
                 const image = $('#image');
                 if (image.val()) {
-                    const file = dataURLtoFile(croppedImageDataURL, $('input[name="phone_number"]').val() + '.png');
+                    const file = dataURLtoFile(croppedImageDataURL, $('#cosmetic_name').val() + '.png');
                     formData.append('image', file);
                     console.log('filename: ' + file.name);
                 }
                 $.ajax({
-                    url: '{{ route('user-management.edit') }}',
+                    url: '{{ route('cosmetic-management.store') }}',
                     type: 'POST',
                     data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        console.log(response);
+                        console.log(response.data);
                         if (response.error) {
                             $('.message').html(`<p class="text-danger">${response.error}</p>`);
                         } else if (response.success) {
                             $('.message').html(`<p class="text-success">${response.success}</p>`);
                             $('#statusSuccessModal').modal('show');
                             $('#ok-button').on('click', function () {
-                                window.location.href = '{{ route('user-management') }}';
+                                window.location.href = '{{ route('cosmetic-management') }}';
                             });
-                            $('#btn-stay-here').on('click', function () {
-                                location.reload();
+                            $('#add-more-button').on('click', function () {
+                                window.location.href = '{{ route('cosmetic-management.create') }}';
                             });
+
                         }
                     },
                     error: function (data) {

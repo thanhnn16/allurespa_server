@@ -206,7 +206,8 @@
                                                href="#" data-id="{{ $user->id }}">Xem
                                             </a>
                                             <p class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer"><a
-                                                    href="#" data-id="{{ $user->id }}">Sửa</a></p>
+                                                    href="{{ route('user-management.update', ['id' => $user->id]) }}"
+                                                    data-id="{{ $user->id }}">Sửa</a></p>
                                             <a class="text-sm font-weight-bold mb-0 ps-2 cursor-pointer user-delete"
                                                data-bs-toggle="modal" data-id="{{ $user->id }}"
                                                data-bs-target="#modal-notification">Xoá</a>
@@ -547,6 +548,15 @@
                     });
                 }
             }
+
+
+            $('.edit-user-link').click(function (e) {
+                e.preventDefault();
+                const id = $(this).data('id');
+
+            });
+
+
         });
 
     </script>

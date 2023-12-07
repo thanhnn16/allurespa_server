@@ -70,6 +70,10 @@
                                     <input class="form-control" id="edt-full_name" disabled type="text"
                                            name="full_name"
                                            value=""></label>
+                                <ul class="list-group list-group-flush position-absolute left-0 bottom--2"
+                                    id="edt-full_name_list"
+                                    style="display: none;">
+                                </ul>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -97,6 +101,7 @@
                                 <label class="form-check-label" for="edt-tu-van">
                                     Tư vấn
                                 </label>
+
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" disabled type="radio" name="edt-muc_dich"
@@ -113,6 +118,9 @@
                                     <input class="form-control" disabled type="text" id="edt-treatment_name"
                                            name="treatment_name"
                                            value=""></label>
+                                <ul class="list-group list-group-flush" id="edt-treatment_name_list"
+                                    style="display: none;">
+                                </ul>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -591,13 +599,177 @@
                             $('#edt-for_treatment').prop('checked', appointment.is_consultation === 0);
                             $('#edt-note').val(appointment.note);
                             $('#edt-status').val(appointment.status);
-
                             $('#edit-button').click(function () {
+
+                                let userId = '';
+                                let treatmentId = '';
+                                let isConsultation = false;
+                                let isValidUser = false;
+                                let isValidTreatment = false;
+
+
                                 $('#appointment-information textarea[name="note"]').removeAttr('disabled');
                                 $('#appointment-information select[name="status"]').removeAttr('disabled');
+                                $('#appointment-information input[name="treatment_name"]').removeAttr('disabled');
+                                $('#appointment-information input[name="full_name"]').removeAttr('disabled');
+                                $('#appointment-information input[name="edt-muc_dich"]').removeAttr('disabled').on('change', function () {
+                                    if ($(this).attr('id') === 'edt-tu-van') {
+                                        $('#appointment-information input[name="treatment_name"]').attr('disabled', true).val('');
+                                        $('#appointment-information input[name="edt-treatment_price"]').val('');
+                                        isConsultation = true;
+                                        isValidTreatment = true;
+                                    } else {
+                                        $('#appointment-information input[name="treatment_name"]').removeAttr('disabled');
+                                        isConsultation = false;
+                                        isValidTreatment = false;
+                                    }
+                                });
+
+
+                                $('#edt-full_name').on(
+                                    'keyup', function () {
+                                        let full_name = $('#appointment-information input[name="full_name"]').val();
+                                        if (full_name.length > 0) {
+                                            $.ajax({
+                                                url: '/user-management-search',
+                                                data: {
+                                                    q: full_name,
+                                                },
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                                },
+                                                type: "get",
+                                                success: function (response) {
+                                                    let html = '';
+
+                                                    if (response.error) {
+                                                        html += '<li class="list-group-item cursor-pointer list-group-item-danger w-100">' + response.error + '</li>';
+                                                        $('#edt-full_name_list').html(html);
+                                                        $('#edt-full_name_list').show();
+                                                        return;
+                                                    }
+
+                                                    let customers = response.users;
+                                                    customers.forEach(function (customer) {
+                                                        html += '<li class="list-group-item cursor-pointer list-group-item-action w-100" data-id=" ' + customer.id + ' " data-email="' + customer.email + '" data-phone_number="' + customer.phone_number + '">' + customer.full_name + ' - ' + customer.phone_number + '</li>';
+                                                    });
+                                                    $('#edt-full_name_list').html(html);
+                                                    $('#edt-full_name_list').show();
+                                                    $('#edt-full_name_list li').click(function () {
+                                                        $('#appointment-information input[name="full_name"]').val($(this).text());
+                                                        $('#appointment-information input[name="email"]').val($(this).data('email'));
+                                                        $('#appointment-information input[name="phone_number"]').val($(this).data('phone_number'));
+                                                        userId = $(this).data('id');
+                                                        isValidUser = true;
+                                                        $('#edt-full_name_list').hide();
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $('#edt-full_name_list').hide();
+                                        }
+                                    });
+
+                                $('#edt-treatment_name').on(
+                                    'keyup', function () {
+                                        let treatment_name = $('#appointment-information input[name="treatment_name"]').val();
+                                        if (treatment_name.length > 0) {
+                                            $.ajax({
+                                                url: '/treatment-management-search',
+                                                data: {
+                                                    q: treatment_name,
+                                                },
+                                                headers: {
+                                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                                },
+                                                type: "get",
+                                                success: function (response) {
+                                                    let html = '';
+
+                                                    if (response.error) {
+                                                        html += '<li class="list-group-item cursor-pointer list-group-item-danger w-100">' + response.error + '</li>';
+                                                        $('#edt-treatment_name_list').html(html);
+                                                        $('#edt-treatment_name_list').show();
+                                                        return;
+                                                    }
+
+                                                    let treatments = response.treatments;
+                                                    treatments.forEach(function (treatment) {
+                                                        html += '<li class="list-group-item cursor-pointer list-group-item-action w-100" data-id=" ' + treatment.id + '" data-price="' + treatment.price + '">' + treatment.treatment_name + '</li>';
+                                                    });
+                                                    $('#edt-treatment_name_list').html(html);
+                                                    $('#edt-treatment_name_list').show();
+                                                    $('#edt-treatment_name_list li').click(function () {
+                                                        $('#appointment-information input[name="treatment_name"]').val($(this).text());
+                                                        $('#appointment-information input[name="edt-treatment_price"]').val($(this).data('price'));
+                                                        treatmentId = $(this).data('id');
+                                                        isValidTreatment = true;
+                                                        $('#edt-treatment_name_list').hide();
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $('#edt-treatment_name_list').hide();
+                                        }
+                                    });
+
                                 $('#edit-button').hide();
-                                $('#save-button').show();
+                                $('#save-button').show().on('click', function (e) {
+                                    e.preventDefault();
+                                    let full_name = $('#appointment-information input[name="full_name"]').val();
+                                    let phone_number = $('#appointment-information input[name="phone_number"]').val();
+                                    let note = $('#appointment-information textarea[name="note"]').val();
+                                    let status = $('#appointment-information select[name="status"]').val();
+                                    let treatment_name = $('#appointment-information input[name="treatment_name"]').val();
+                                    let treatment_price = $('#appointment-information input[name="edt-treatment_price"]').val();
+                                    let is_consultation = $('#appointment-information input[name="edt-muc_dich"]:checked').val() === 'on' ? 1 : 0;
+                                    $.ajax({
+                                        url: '/appointment-management/' + event.id,
+                                        data: {
+                                            user_id: userId,
+                                            note: note,
+                                            status: status,
+                                            treatment_id: treatmentId,
+                                            type: 'update',
+                                        },
+                                        type: "POST",
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                        },
+                                        success: function (response) {
+                                            console.log(response);
+                                            if (response.error) {
+                                                console.log(response.error);
+                                                alert('Có lỗi xảy ra khi cập nhật lịch hẹn');
+                                            }
+                                            alert('Cập nhật lịch hẹn thành công');
+                                            $('#appointment-information').modal('hide');
+                                            location.reload();
+                                        },
+                                    });
+                                });
                                 $('#delete-button').show();
+                            });
+                            $('#delete-button').click(function () {
+                                $.ajax({
+                                    url: '/appointment-management/' + event.id,
+                                    data: {
+                                        type: 'delete',
+                                    },
+                                    type: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                    },
+                                    success: function (response) {
+                                        if (response.error) {
+                                            console.log(response.error);
+                                            alert('Có lỗi xảy ra khi xoá lịch hẹn');
+                                        }
+                                        alert('Xoá lịch hẹn thành công');
+                                        $('#appointment-information').modal('hide');
+                                        location.reload();
+                                    },
+                                });
                             });
                         },
                     });
