@@ -369,7 +369,8 @@
                         </div>
                         <hr class="horizontal dark">
                         <p class="text-uppercase text-sm">LỊCH SỬ ĐẶT LỊCH</p>
-                        <div id="appointment-history"></div>
+                        <div id="appointment-history">
+                        </div>
                         <hr class="horizontal dark">
                         <p class="text-uppercase text-sm">LỊCH SỬ DỊCH VỤ</p>
                         <div id="service-history"></div>
@@ -490,8 +491,78 @@
                             $('input[name=address]').val(response.user.address);
                             $('input[name=date_of_birth]').val(dob);
                             $('input[name=note]').val(response.user.note);
-                            $('#appointment-history').html(response.appointment.appointment_date);
-                            $('#service-history').html(response.service_history);
+                            $('#appointment-history').html('');
+                            $('#service-history').html('');
+
+                            if (response.appointments.length > 0) {
+                                let appointmentHistory = '<table class="table align-items-center mb-0 mt-3">' +
+                                    '<thead>' +
+                                    '<tr>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thời gian</th>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Dịch vụ</th>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tư vấn</th>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Trạng thái</th>' +
+                                    '</tr>' +
+                                    '</thead>' +
+                                    '<tbody>';
+                                $.each(response.appointments, function (index, value) {
+                                    let status = value.status === 'pending' ? 'Chờ xác nhận' : value.status === 'scheduled' ? 'Đã xác nhận' : value.status === 'completed' ? 'Đã hoàn thành' : 'Đã hủy';
+                                    let isConsultation = value.is_consultation === 1 ? 'Có' : 'Không';
+                                    let startDate = new Date((value.start_date)).toLocaleTimeString('vi-VN') + ' ' + new Date(value.start_date).toLocaleDateString('vi-VN');
+                                    let endDate = new Date(value.end_date).toLocaleTimeString('vi-VN') + ' ' + new Date(value.end_date).toLocaleDateString('vi-VN');
+                                    let treatmentName = value.treatment_name == null ? 'N/A' : value.treatment_name;
+                                    appointmentHistory += '<tr>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + startDate + " - " + endDate + '</p>' +
+                                    '</td>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + treatmentName + '</p>' +
+                                    '</td>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + isConsultation + '</p>' +
+                                    '</td>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + status + '</p>' +
+                                        '</td>' +
+                                        '</tr>';
+                                });
+                                appointmentHistory += '</tbody></table>';
+                                $('#appointment-history').html(appointmentHistory);
+                            } else {
+                                $('#appointment-history').html('<p class="text-center">Không có lịch hẹn nào</p>');
+                            }
+
+                            if (response.invoices.length > 0) {
+                                let serviceHistory = '<table class="table align-items-center mb-0 mt-3">' +
+                                    '<thead>' +
+                                    '<tr>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thời gian</th>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ghi chú</th>' +
+                                    '<th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Trạng thái</th>' +
+                                    '</tr>' +
+                                    '</thead>' +
+                                    '<tbody>';
+                                $.each(response.invoices, function (index, value) {
+                                    let status = value.status === 'pending' ? 'Chờ xác nhận' : value.status === 'scheduled' ? 'Đã xác nhận' : value.status === 'completed' ? 'Đã hoàn thành' : 'Đã hủy';
+                                    let createdDate = new Date(value.created_at).toLocaleDateString('vi-VN');
+                                    serviceHistory += '<tr>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + createdDate + '</p>' +
+                                    '</td>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + value.note + '</p>' +
+                                    '</td>' +
+                                    '<td class="align-middle text-center text-sm">' +
+                                    '<p class="text-sm font-weight-bold mb-0">' + status + '</p>' +
+                                        '</td>' +
+                                        '</tr>';
+                                });
+                                serviceHistory += '</tbody></table>';
+                                $('#service-history').html(serviceHistory);
+                            } else {
+                                $('#service-history').html('<p class="text-center">Không có dịch vụ nào</p>');
+                            }
+
                         }
                     },
                 })

@@ -35,10 +35,12 @@ class UserController extends Controller
     {
         $user = User::all()
             ->find($id);
+
         if ($user) {
             return response()->json([
                 'user' => $user,
-                'appointment' => $user->appointments
+                'appointments' => $user->appointments,
+                'invoices' => $user->invoices,
             ]);
         } else {
             return response()->json([

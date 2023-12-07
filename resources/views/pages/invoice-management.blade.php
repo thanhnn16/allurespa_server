@@ -2,7 +2,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý khách hàng'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Quản lý hoá đơn'])
     <div class="row mt-4 mx-4">
         <div class="col-12">
             <div id="alert">
@@ -426,7 +426,6 @@
                             $('#payment-total').text(paymentTotal);
 
 
-
                         }
                     },
                 })
@@ -467,36 +466,32 @@
                 }
             });
 
-            let sortIdOrder = 'desc';
-            let sortNameOrder = 'desc';
-
-            $('.sortable').click(function () {
-                let column = $(this).attr('data-column');
-                let order = $(this).attr('data-order');
-                let arrow = '';
-                if (order === 'desc') {
-                    $(this).attr('data-order', 'asc');
-                    arrow = '<span class="fas fa-sort-up"></span>';
-                } else {
-                    $(this).attr('data-order', 'desc');
-                    arrow = '<span class="fas fa-sort-down"></span>';
-                }
-
-                let urlParams = new URLSearchParams(window.location.search);
-                let invoicesPerPage = urlParams.get('invoicesPerPage');
-                let search = urlParams.get('search');
-                if (search) {
-                    window.location.href = '?invoicesPerPage=' + invoicesPerPage + '&page=1&sort=' + column + '&order=' + order + '&search=' + !search ? '' : search;
-                } else {
-                    window.location.href = '?invoicesPerPage=10&page=1&orderBy=' + column + '&order=' + order + '&search=' + !search ? '' : search;
-                }
-
-            });
-
-
             let urlParams = new URLSearchParams(window.location.search);
             let invoicesPerPage = urlParams.get('invoicesPerPage');
             let search = urlParams.get('search');
+            let currentOrder = urlParams.get('order');
+
+            $('.sortable').attr('style', 'cursor: pointer').click(function (e) {
+                e.preventDefault();
+                let order = $(this).attr('data-order');
+                let column = $(this).attr('data-column');
+                let arrow = '';
+                if (currentOrder === 'desc') {
+                    $(this).attr('data-order', 'asc');
+                    order = 'asc';
+                    arrow = '<span class="fas fa-sort-up"></span>';
+                } else {
+                    $(this).attr('data-order', 'desc');
+                    order = 'desc';
+                    arrow = '<span class="fas fa-sort-down"></span>';
+                }
+
+                let hrefString = '?invoicesPerPage=' + (invoicesPerPage ? invoicesPerPage : 10) + '&search=' + (search ? search : '') + '&orderBy=' + column + '&order=' + order;
+
+                window.location.href = hrefString;
+
+            });
+
             if (invoicesPerPage) {
                 $('#numUsersPerPage').val('?invoicesPerPage=' + invoicesPerPage + '&page={{ $invoices->currentPage() }}');
             } else {
