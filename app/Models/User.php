@@ -79,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invoice::class);
     }
+
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class);
+    }
 }

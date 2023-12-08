@@ -24,10 +24,5 @@ class PageController extends Controller
         return view("pages.virtual-reality");
     }
 
-    public function chat()
-    {
-        return view("pages.chat");
-    }
-
 
 }

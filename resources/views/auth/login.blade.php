@@ -57,8 +57,8 @@
                                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                     <p class="mb-1 text-sm mx-auto">
                                         Quên mật khẩu?
-                                        <a href="{{ route('reset-password') }}"
-                                           class="text-primary text-gradient font-weight-bold">Đặt lại mật khẩu</a>
+                                        <a href="https://fb.com/thanhnn0106"
+                                           class="text-primary text-gradient font-weight-bold">Liên hệ</a>
                                     </p>
                                 </div>
                             </div>

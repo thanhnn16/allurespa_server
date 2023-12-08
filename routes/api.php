@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::get('user/{id}', [UserController::class, 'show'])->middleware('json.response');
+    Route::put('user/{id}', [UserController::class, 'updateFromClient'])->middleware('json.response');
 
     Route::get('appointments', [AppointmentController::class, 'index'])->middleware('json.response');
     Route::get('appointments/{id}', [AppointmentController::class, 'show'])->middleware('json.response');

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ChangePassword;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
@@ -103,10 +104,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/voucher/{id}', [VoucherController::class, 'show'])->name('voucher.show');
     Route::post('/voucher-check', [VoucherController::class, 'check'])->name('voucher.check');
 
+//    route for chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat');
+    Route::get('/chats/{user}', [ChatController::class, 'getMessages']);
+    Route::post('/chats', [ChatController::class, 'sendMessage']);
 
 //    route for home
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/chat', [PageController::class, 'chat'])->name('chat');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
 });
 

@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -239,9 +240,10 @@ class UserController extends Controller
                 'request' => $request->all()
             ]);
         }
+
         $data = $request->validate([
             'full_name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'nullable|email|unique:users,email,' . $id,
             'phone_number' => 'required|unique:users,phone_number,' . $id,
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|in:1,0',
@@ -262,11 +264,50 @@ class UserController extends Controller
             $data['image'] = "/uploads/img/users/avatar/" . $imagePath;
         }
 
-        $user->update($data);
-
+        try {
+            $user->update($data);
+            return response()->json([
+                'success' => 'Cập nhật thông tin người dùng thành công',
+                'data' => $data
+            ]);
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return response()->json([
+                    'error' => 'Email hoặc số điện thoại đã tồn tại trong hệ thống.'
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
         return response()->json([
-            'success' => 'Cập nhật thông tin người dùng thành công',
-            'data' => $data
+            'error' => 'Cập nhật thông tin người dùng thất bại'
         ]);
+    }
+
+    public function updateFromClient($id, Request $request): JsonResponse
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'error' => 'Người dùng không tồn tại',
+            ]);
+        }
+        try {
+//            $updatedUser = $request->all()->toArray();
+            $user->update($request->toArray());
+            return response()->json([
+                'success' => 'Cập nhật thông tin người dùng thành công',
+                'data' => $user,
+                'requestAll' => $request->all(),
+                'requestToArray' => $request->toArray(),
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error updating user: ' . $e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }
