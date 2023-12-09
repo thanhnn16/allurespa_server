@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -44,5 +45,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('appointments', [AppointmentController::class, 'index'])->middleware('json.response');
     Route::get('appointments/{id}', [AppointmentController::class, 'show'])->middleware('json.response');
     Route::post('appointment-management', [AppointmentController::class, 'calendarEvents'])->middleware('json.response');
+
+//    Route::get('messages', [ChatController::class, 'index'])->middleware('json.response');
+    Route::get('messages/{userId}', [ChatController::class, 'getMsgToClient'])->middleware('json.response');
+    Route::post('messages', [ChatController::class, 'sendMsgFromClient'])->middleware('json.response');
+
 
 });

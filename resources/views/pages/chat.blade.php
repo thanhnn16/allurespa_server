@@ -121,6 +121,10 @@
                         </div>
                     `);
 
+                        $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                        $('#message-input').val('');
+
+
                     }
                 });
             });

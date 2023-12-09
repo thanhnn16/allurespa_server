@@ -12,7 +12,6 @@
     },
     "dependencies": {
         "cropperjs": "^1.6.1",
-        "firebase": "^10.7.1",
         "fullcalendar": "^6.1.9",
         "lodash": "^4.17.21",
         "perfect-scrollbar": "^1.5.5"
