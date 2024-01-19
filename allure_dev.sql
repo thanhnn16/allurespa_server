@@ -69,6 +69,28 @@ CREATE TABLE users
     updated_at     DATETIME                       NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE inventory_in
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    cosmetic_id   INT                            NOT NULL,
+    quantity      INT                            NOT NULL,
+    user_id INT NOT NULL,
+    date          DATETIME                       NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE inventory_out
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    cosmetic_id   INT                            NOT NULL,
+    quantity      INT                            NOT NULL,
+    user_id INT NOT NULL,
+    date          DATETIME                       NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (cosmetic_id) REFERENCES cosmetics (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
 CREATE TABLE vouchers
 (
     id               INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -231,8 +253,6 @@ CREATE TABLE history
     action_timestamp DATETIME                            NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
-#
 
 # Insert default data
 
